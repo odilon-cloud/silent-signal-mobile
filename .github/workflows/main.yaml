@@ -1,0 +1,91 @@
+name: mobile_app
+
+# Control concurrency to ensure only one workflow runs at a time for the same group
+concurrency:
+  group: $-$
+  cancel-in-progress: true
+
+# Trigger the workflow on push or pull request events for the specified branches
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Set permissions for the workflow
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  # Job to ensure commit messages follow semantic conventions
+  semantic-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🤖 Ensure Commit is Semantic
+        uses: amannn/action-semantic-pull-request@V5 # v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+        with:
+          validateSingleCommit: false
+          ignoreLabels: |
+            bot
+            ignore-semantic-pull-request
+          wip: false
+
+  # Job to build and analyze a Flutter package
+  flutter_package:
+    name: Flutter Package Build
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          architecture: x64
+          flutter-version: 3.24.4
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+  # Job to perform spell check on markdown files
+  spell-check:
+    env:
+      GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+    name: Spell Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install cspell
+        run: npm install -g cspell
+
+      - name: Run spell check
+        run: |
+          cspell --no-summary "**/*.md"
+
+      - name: Upload spell check report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: spell-check-report
+          path: cspell.json
