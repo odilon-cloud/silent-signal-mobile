@@ -24,7 +24,9 @@
     "xcworkspace",
     "xcassets",
     "Kinyarwanda",
-    "Muraho"
+    "silent-signal-mobile",
+    "silent_signal_mobile",
+    "logo_silent_signal_mobile"
   ],
   "ignorePaths": [
     "ios/Runner/Assets.xcassets/**/*.md"
