@@ -65,12 +65,12 @@ Image.asset(
               // Description textfield
               InputTextField(
                 controller: passwordController,
-                maxLines: null, // Allows the text field to expand vertically
-                keyboardType: TextInputType.multiline
-                //labelText: '',
-                hintText: 'Provide a detailed description of the incident or crime',
-                obscureText: true,
+                hintText: 'Enter long description',
+               // labelText: 'Subject',
+                obscureText: false,
+                maxLines: null,
               ),
+            
 
               const SizedBox(height: 10),
 
