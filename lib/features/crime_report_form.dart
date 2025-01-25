@@ -167,7 +167,8 @@ class CrimeReportForm extends StatelessWidget {
                     controller: passwordController,
                     hintText: 'Enter long description',
                     obscureText: false,
-                    maxLines: 5,
+                    minLines: 5,
+                    maxLines:null,
                     labelText: 'Crime description',
                   ),
 

@@ -3,7 +3,7 @@
 // class InputTextField extends StatelessWidget {
 //   final controller;
 //   final String hintText;
-//   final String? labelText;  // Add labelText parameter
+//   final String? labelText;
 //   final bool obscureText;
 //   final int? maxLines;
 
@@ -11,7 +11,7 @@
 //     super.key,
 //     required this.controller,
 //     required this.hintText,
-//     this.labelText,  // Make it optional
+//     this.labelText,
 //     required this.obscureText,
 //     this.maxLines = 1,
 //   });
@@ -32,7 +32,7 @@
 //                 fontWeight: FontWeight.w500,
 //               ),
 //             ),
-//             const SizedBox(height: 8),  // Space between label and field
+//             const SizedBox(height: 8),
 //           ],
 //           TextField(
 //             controller: controller,
@@ -48,7 +48,12 @@
 //               fillColor: Colors.grey.shade200,
 //               filled: true,
 //               hintText: hintText,
-//               hintStyle: TextStyle(color: Colors.grey[500])
+//               hintStyle: TextStyle(color: Colors.grey[500]),
+//               // Add these for smaller height on single-line inputs
+//               contentPadding: maxLines == 1 
+//                 ? const EdgeInsets.symmetric(horizontal: 12, vertical: 10)
+//                 : const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+//               isDense: maxLines == 1 ? true : false,
 //             ),
 //           ),
 //         ],
@@ -56,7 +61,6 @@
 //     );
 //   }
 // }
-
 import 'package:flutter/material.dart';
 
 class InputTextField extends StatelessWidget {
@@ -64,7 +68,9 @@ class InputTextField extends StatelessWidget {
   final String hintText;
   final String? labelText;
   final bool obscureText;
+  final int? minLines;
   final int? maxLines;
+  final double? verticalPadding;
 
   const InputTextField({
     super.key,
@@ -72,7 +78,9 @@ class InputTextField extends StatelessWidget {
     required this.hintText,
     this.labelText,
     required this.obscureText,
+    this.minLines = 1,
     this.maxLines = 1,
+    this.verticalPadding,
   });
 
   @override
@@ -96,6 +104,7 @@ class InputTextField extends StatelessWidget {
           TextField(
             controller: controller,
             obscureText: obscureText,
+            minLines: minLines,
             maxLines: maxLines,
             decoration: InputDecoration(
               enabledBorder: const OutlineInputBorder(
@@ -108,10 +117,10 @@ class InputTextField extends StatelessWidget {
               filled: true,
               hintText: hintText,
               hintStyle: TextStyle(color: Colors.grey[500]),
-              // Add these for smaller height on single-line inputs
-              contentPadding: maxLines == 1 
-                ? const EdgeInsets.symmetric(horizontal: 12, vertical: 10)
-                : const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: verticalPadding ?? (maxLines == 1 ? 10 : 16),
+              ),
               isDense: maxLines == 1 ? true : false,
             ),
           ),
