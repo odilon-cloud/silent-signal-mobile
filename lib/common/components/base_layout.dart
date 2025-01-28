@@ -70,17 +70,18 @@ class _BaseLayoutState extends State<BaseLayout> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.bar_chart),
+            label: 'Community',
+          ),
+           BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events),
+            label: 'Events',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
+         
         ],
       ),
     );
