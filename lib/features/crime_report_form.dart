@@ -303,7 +303,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
                     curve: Curves.easeInOut,
                   );
                 },
-                buttonText: "Next",
+                buttonText: "Continue",
                 buttonColor: Colors.blue,
                 height: 35,
               ),
@@ -341,7 +341,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
               ),
 
               const SizedBox(height: 50),
-              
+
           Container(
   padding: const EdgeInsets.all(20),
   margin: const EdgeInsets.symmetric(horizontal: 40),
@@ -367,7 +367,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       Text(
         'Upload An Attachment (optional)',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           color: Colors.grey[800],
           fontWeight: FontWeight.w500,
         ),
