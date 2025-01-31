@@ -134,7 +134,7 @@ class _DateInputFieldState extends State<DateInputField> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey.shade400),
               ),
-              fillColor: Colors.grey.shade200,
+              fillColor: Colors.grey.shade100,
               filled: true,
               hintText: widget.hintText,
               hintStyle: TextStyle(color: Colors.grey[500]),
