@@ -53,7 +53,9 @@ class _BaseLayoutState extends State<BaseLayout> {
           ),
         ),
         ),
-      body: _pages[_selectedIndex],
+      body: SafeArea(
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -124,8 +126,19 @@ class HomePage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const Text(
+                    'Good Afternoon,',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
+              ),
+              const Text(
+                    'Anonymous',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 35),
               // First single card
               Card(
                 child: Container(
@@ -138,7 +151,7 @@ class HomePage extends StatelessWidget {
                   ), 
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 25),
               
               // Two cards in a row
               Row(
@@ -169,7 +182,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(height: 25),
                   Expanded(
                     child: Card(
                       child: Container(
@@ -190,7 +203,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 25),
               
               // Fourth single card
               Card(
