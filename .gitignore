@@ -58,3 +58,4 @@ analysis_benchmark.json
 .flutter-plugins
 .flutter-plugins-dependencies
 .idea
+build/app/outputs/
