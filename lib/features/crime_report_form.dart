@@ -11,18 +11,13 @@ class CrimeFormData {
   String? date;
   bool isLocationEnabled;
   // Second page fields
-  String? witnessName;
-  String? witnessContact;
-  String? evidenceDescription;
+
   
   CrimeFormData({
     this.subject,
     this.crimeDescription,
     this.date,
     this.isLocationEnabled = false,
-    this.witnessName,
-    this.witnessContact,
-    this.evidenceDescription,
   });
 }
 

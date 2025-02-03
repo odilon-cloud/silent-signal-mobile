@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:silentsignal/features/auth/LoginForm.dart';
 import 'package:silentsignal/features/crime_report_form.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const BaseLayout(),
+      home: Loginform(),
     );
   }
 }
