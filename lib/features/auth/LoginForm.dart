@@ -13,6 +13,7 @@ class Loginform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -46,10 +47,14 @@ class Loginform extends StatelessWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                //backgroundColor: Colors.grey[200],
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  side: BorderSide(color: Colors.grey.shade400),
+               ),
+                backgroundColor: Colors.white,
                 //foregroundColor: Colors.grey[800],
-                elevation: 1,
+                elevation: 0,
               ),
             ),
               const SizedBox(height: 25),
@@ -117,7 +122,7 @@ class Loginform extends StatelessWidget {
                   );
                 }, 
                 buttonText: 'Submit',
-                height: 40,
+                height: 50,
                 width:  MediaQuery.of(context).size.width * 0.7
               ),
 

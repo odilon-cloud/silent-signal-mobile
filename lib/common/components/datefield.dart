@@ -128,13 +128,13 @@ class _DateInputFieldState extends State<DateInputField> {
             readOnly: true,
             onTap: _selectDate,
             decoration: InputDecoration(
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey.shade400),
               ),
-              fillColor: Colors.grey.shade100,
+              fillColor: Colors.white,
               filled: true,
               hintText: widget.hintText,
               hintStyle: TextStyle(color: Colors.grey[500]),
