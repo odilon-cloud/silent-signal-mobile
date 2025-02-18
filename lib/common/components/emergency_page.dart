@@ -11,38 +11,59 @@ class EmergencyPage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [  
-              const Text(
-                    'Settings',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14),
-              ),
+            children: [ 
               const SizedBox(height: 40),          
               Card(
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Icon(Icons.contacts),
-                      Text(
-                        'Personal info',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      Icon(Icons.arrow_forward_ios_outlined),
-                    ],
+                  child: const Text(
+                    'EMERGENCY Call',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
               ),
              const SizedBox(height: 16),
-              
-            
-          
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'EMERGENCY Tips',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ),
               
               const SizedBox(height: 20),
-            ],
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'EMERGENCY Fire',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'EMERGENCY Fire',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ),
+              ]
           ),
         ),
       ),
