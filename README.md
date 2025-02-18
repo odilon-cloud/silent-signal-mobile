@@ -26,3 +26,5 @@ cd silent-signal-mobile
 flutter pub get
 flutter run
 ```
+
+### Debug issues on running the project

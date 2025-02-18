@@ -22,9 +22,9 @@ class ProfilePage extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Icon(Icons.contacts),
                       Text(
                         'Personal info',
@@ -36,12 +36,65 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-             const SizedBox(height: 16),
-              
-            
-          
+             const SizedBox(height: 20),
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.contacts),
+                      Text(
+                        'Personal info',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Icon(Icons.arrow_forward_ios_outlined),
+                    ],
+                  ),
+                ),
+              ),    
               
               const SizedBox(height: 20),
+
+              Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.contacts),
+                      Text(
+                        'Contact info',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Icon(Icons.arrow_forward_ios_outlined),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+               Card(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.contacts),
+                      Text(
+                        'Personal info',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Icon(Icons.arrow_forward_ios_outlined),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -83,7 +83,7 @@ class _BaseLayoutState extends State<BaseLayout> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.alarm_sharp),
-          //  label: 'Community',
+            label: '',
           ),
            BottomNavigationBarItem(
             icon: Icon(Icons.emoji_events),
