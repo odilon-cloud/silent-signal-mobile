@@ -13,20 +13,19 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                     Text(
                       'Good Afternoon,',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal
                       )
                     ),
-                    const Text(
+                    Text(
                       'Anonymous',
                       style: TextStyle(
                         fontSize: 20,
@@ -60,7 +59,7 @@ class HomePage extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => CrimeReportForm()),
+                            MaterialPageRoute(builder: (context) => const CrimeReportForm()),
                           );
                         },
                         child: Container(

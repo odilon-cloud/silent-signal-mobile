@@ -276,7 +276,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.camera_alt,
           color: Colors.blue,
           size: 30,
@@ -285,7 +285,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         },
       ),
       IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.attachment,
           color: Colors.blue,
           size: 30,
@@ -308,7 +308,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
                   SampleButton(
                     onTap: () {
                       _pageController.previousPage(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
                     },

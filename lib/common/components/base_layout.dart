@@ -73,7 +73,7 @@ class _BaseLayoutState extends State<BaseLayout> {
         height: 60,
         width: 60,
       ),
-      Padding(
+      const Padding(
         padding: EdgeInsets.only(top: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

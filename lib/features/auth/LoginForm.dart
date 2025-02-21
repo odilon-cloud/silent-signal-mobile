@@ -1,176 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:silentsignal/common/components/base_layout.dart';
-// import 'package:silentsignal/common/components/button.dart';
-// import 'package:silentsignal/common/components/textfield.dart';
-// import 'package:silentsignal/features/auth/SignupForm.dart';
-
-// class Loginform extends StatelessWidget {
-//   Loginform({super.key});
-  
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Center(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const SizedBox(height: 10),
-
-//               Image.asset(
-//                 'assets/logos/logo_silent_signal.png',
-//                 height: 100,
-//                 width: 100,
-//               ),
-
-//               const SizedBox(height: 40),
-
-//              ElevatedButton.icon(
-//               onPressed: () {
-//                 // Add your button action here
-//               },
-//               icon: const Icon(
-//                 Icons.info,
-//                 size: 30,
-//               ),
-//               label: Text(
-//                 'Continue Anonymously',
-//                 style: TextStyle(
-//                   fontSize: 15,
-//                   color: Colors.grey[800],
-//                   fontWeight: FontWeight.w500,
-//                 ),
-//               ),
-//               style: ElevatedButton.styleFrom(
-//                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(5),
-//                   side: BorderSide(color: Colors.grey.shade400),
-//                ),
-//                 backgroundColor: Colors.white,
-//                 //foregroundColor: Colors.grey[800],
-//                 elevation: 0,
-//               ),
-//             ),
-//               const SizedBox(height: 25),
-//                Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
-//                 child: Row(
-//                   children: [
-//                     Expanded(
-//                       child: Divider(
-//                         thickness: 0.5,
-//                         color: Colors.grey[400],
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 7.0),
-//                       child: Text(
-//                         'OR',
-//                         style: TextStyle(color: Colors.grey[700]),
-//                       ),
-//                     ),
-//                     Expanded(
-//                       child: Divider(
-//                         thickness: 0.5,
-//                         color: Colors.grey[400],
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-              
-//               const SizedBox(height: 25),
-
-//               InputTextField(
-//                 controller: emailController, 
-//                 hintText: "youremail@gmail.com", 
-//                 obscureText: false,
-//                 labelText: 'Email *',
-//               ),
-
-//               const SizedBox(height: 25),
-
-//               InputTextField(
-//                 controller: passwordController,
-//                 hintText: 'password',
-//                 obscureText: true,
-//                 labelText: 'Password',
-//               ),
-              
-//               const SizedBox(height: 25),
-
-//               SampleButton(
-//                 onTap:  (){
-//                   Navigator.push(
-//                         context,
-//                         MaterialPageRoute(builder: (context) {
-//                           return Scaffold( 
-//                             // appBar: AppBar(
-//                             //   title: Text('Signup'),
-//                             //   backgroundColor: Colors.black, 
-//                             // ),
-//                             body: BaseLayout(), 
-//                           );
-  
-//                         }),
-//                   );
-//                 }, 
-//                 buttonText: 'Submit',
-//                 height: 50,
-//                 width:  MediaQuery.of(context).size.width * 0.7
-//               ),
-
-
-//               const SizedBox(height: 25),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Text(
-//                     'Not a member?',
-//                     style: TextStyle(color: Colors.grey[700]),
-//                   ),
-//                   const SizedBox(width: 4),
-//                   GestureDetector(
-//                     onTap: () {
-                      
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(builder: (context) {
-//                           return Scaffold( 
-//                             body: Signupform(), 
-//                           );
-//                         }),
-//                       );
-//                     },
-//                     child: const Text(
-//                       'Sign up',
-//                       style: TextStyle(
-//                         color: Colors.black,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   )
-//                 ],
-//               )
-//               ],
-
-              
-
-//             ),
-//           ),
-//         )
-//       ),
-
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
@@ -218,7 +45,7 @@ class _LoginformState extends State<Loginform> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => BaseLayout()),
+                        MaterialPageRoute(builder: (context) => const BaseLayout()),
                       );
                     },
                   icon: const Icon(
@@ -347,7 +174,7 @@ class _LoginformState extends State<Loginform> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return Scaffold(
+                            return const Scaffold(
                               body: Signupform(),
                             );
                           }),
@@ -396,7 +223,7 @@ class _LoginformState extends State<Loginform> {
   void _submitForm() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BaseLayout()),
+      MaterialPageRoute(builder: (context) =>const BaseLayout()),
     );
   }
 
