@@ -215,16 +215,12 @@ class _LoginformState extends State<Loginform> {
                 const SizedBox(height: 40),
 
                 ElevatedButton.icon(
-                  onPressed: () {
-                     Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return Scaffold(
-                          body: BaseLayout(),
-                        );
-                      }),
-                    );
-                  },
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => BaseLayout()),
+                      );
+                    },
                   icon: const Icon(
                     Icons.info,
                     size: 30,
@@ -400,11 +396,7 @@ class _LoginformState extends State<Loginform> {
   void _submitForm() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) {
-        return Scaffold(
-          body: BaseLayout(),
-        );
-      }),
+      MaterialPageRoute(builder: (context) => BaseLayout()),
     );
   }
 

@@ -28,37 +28,66 @@ class _BaseLayoutState extends State<BaseLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(120), // Adjust height as needed
-        child: AppBar(
-          //backgroundColor: Colors.white,
-          elevation: 0,
-          flexibleSpace: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Image.asset(
-                  'assets/logos/logo_silent_signal.png',
-                  height: 60,
-                  width: 60,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('assets/profile.png'),
-                    ),
-                    Icon(Icons.notifications_none_rounded, color: Colors.black, size:35),
-                  ],
-                ),
-                ),
-            ],
-          ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(90), // Adjust height as needed
+      //   child: AppBar(
+      //     //backgroundColor: Colors.white,
+      //     automaticallyImplyLeading: false, // remove back arrow 
+      //     elevation: 0,
+      //     flexibleSpace: Column(
+      //       children: [
+      //         Padding(
+      //           padding: EdgeInsets.only(top: 20),
+      //           child: Image.asset(
+      //             'assets/logos/logo_silent_signal.png',
+      //             height: 60,
+      //             width: 60,
+      //           ),
+      //         ),
+      //         Padding(
+      //           padding: EdgeInsets.symmetric(horizontal: 16.0),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               CircleAvatar(
+      //                 backgroundImage: AssetImage('assets/profile.png'),
+      //               ),
+      //               Icon(Icons.notifications_none_rounded, color: Colors.black, size:35),
+      //             ],
+      //           ),
+      //           ),
+      //       ],
+      //     ),
+      //   ),
+      //   ),
+      appBar: AppBar(
+  //backgroundColor: Colors.white,
+  automaticallyImplyLeading: false, // remove back arrow 
+  elevation: 0,
+  toolbarHeight: kToolbarHeight + 60, // Base height plus logo height
+  title: Column(
+    mainAxisSize: MainAxisSize.min, // This is key - only use minimum space needed
+    children: [
+      Image.asset(
+        'assets/logos/logo_silent_signal.png',
+        height: 60,
+        width: 60,
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CircleAvatar(
+              backgroundImage: AssetImage('assets/profile.png'),
+            ),
+            Icon(Icons.notifications_none_rounded, color: Colors.black, size: 35),
+          ],
         ),
-        ),
+      ),
+    ],
+  ),
+),
       body: SafeArea(
         child: _pages[_selectedIndex],
       ),

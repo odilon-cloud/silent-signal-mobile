@@ -13,15 +13,28 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text(
-                    'Good Afternoon,',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14),
-              ),
-              const Text(
-                    'Anonymous',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Good Afternoon,',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.normal
+                      )
+                    ),
+                    const Text(
+                      'Anonymous',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 35),
               // First single card
