@@ -1,8 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/datefield.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
+import 'dart:io';
 
 class CrimeFormData {
   String? subject;
@@ -29,7 +31,42 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   final _pageController = PageController();
   final _formData = CrimeFormData();
   bool _showValidationErrors = false;
+
+
+  //File uploading section
+  FilePickerResult? result;
+  String? _fileName;
+  PlatformFile? pickedfile;
+  bool isLoading = false;
+  File? fileToDisplay;
+
+  void pickFile() async{
+    try{
+      setState(() {
+        isLoading = true;
+      });
+
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
   
+      );
+
+      if(result!=null){
+        _fileName =result!.files.first.name;
+        pickedfile = result!.files.first;
+        fileToDisplay = File(pickedfile!.path.toString());
+
+        print("File name $_fileName");
+      }
+      setState(() {
+        isLoading=false;
+      });
+    }catch(e){
+      print(e);
+    }
+  
+  }
   // First page controllers
   final subjectController = TextEditingController();
   final crimeDescriptionController = TextEditingController();
@@ -253,7 +290,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       color: Colors.grey.withOpacity(0.2),
       spreadRadius: 2,
       blurRadius: 5,
-      offset: Offset(0, 2),
+      offset: const Offset(0, 2),
     ),
   ],
   ),
@@ -268,7 +305,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           fontWeight: FontWeight.w500,
         ),
       ),
-      SizedBox(height: 10),  // Added spacing between text and icons
+      const SizedBox(height: 10),  // Added spacing between text and icons
 
       Padding(
   padding: const EdgeInsets.symmetric(horizontal: 40), // Add padding around the Row
@@ -282,8 +319,15 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           size: 30,
         ),
         onPressed: () {
+          pickFile();
         },
       ),
+      if(pickedfile!=null)
+        SizedBox(
+          height:80,
+          width:80,
+          child: Image.file(fileToDisplay!),
+        ),
       IconButton(
         icon: const Icon(
           Icons.attachment,
@@ -291,8 +335,15 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           size: 30,
         ),
         onPressed: () {
+          pickFile();
         },
       ),
+      if(pickedfile!=null)
+        SizedBox(
+          height:80,
+          width:80,
+          child: Image.file(fileToDisplay!),
+        ),
     ],
   ),
 ),

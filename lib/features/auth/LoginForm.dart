@@ -46,7 +46,7 @@ class _LoginformState extends State<Loginform> {
                      Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return Scaffold(
+                        return const Scaffold(
                           body: BaseLayout(),
                         );
                       }),
@@ -227,7 +227,11 @@ class _LoginformState extends State<Loginform> {
   void _submitForm() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) =>const BaseLayout()),
+      MaterialPageRoute(builder: (context) {
+        return const Scaffold(
+          body: BaseLayout(),
+        );
+      }),
     );
   }
 
