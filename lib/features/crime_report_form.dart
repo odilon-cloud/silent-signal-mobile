@@ -31,6 +31,8 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   final _pageController = PageController();
   final _formData = CrimeFormData();
   bool _showValidationErrors = false;
+  List<dynamic> selectedFiles = []; // Stores both images and documents
+
 
 
   //File uploading section
@@ -40,33 +42,30 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   bool isLoading = false;
   File? fileToDisplay;
 
-  void pickFile() async{
-    try{
+  void pickFile() async {
+    try {
       setState(() {
-        isLoading = true;
+        // Start loading state
       });
 
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.any,
-        allowMultiple: false,
-  
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.any, // Allows any file type (images, videos, docs, etc.)
+        allowMultiple: true,
       );
 
-      if(result!=null){
-        _fileName =result!.files.first.name;
-        pickedfile = result!.files.first;
-        fileToDisplay = File(pickedfile!.path.toString());
-
-        print("File name $_fileName");
+      if (result != null) {
+        setState(() {
+          selectedFiles.addAll(result.files
+              .where((file) => file.path != null)
+              .map((file) => File(file.path!)));
+        });
       }
-      setState(() {
-        isLoading=false;
-      });
-    }catch(e){
-      print(e);
+    } catch (e) {
+      print("Error picking file: $e");
     }
-  
   }
+
+
   // First page controllers
   final subjectController = TextEditingController();
   final crimeDescriptionController = TextEditingController();
@@ -76,6 +75,28 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   String? subjectError;
   String? descriptionError;
   String? dateError;
+
+  void _showSuccessDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Success"),
+        content: const Text("Your form has been submitted successfully."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // ✅ Close dialog
+              _pageController.jumpToPage(0); // ✅ Go back to the first page
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,148 +268,195 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     );
   }
 
-    Widget _buildSecondPage() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
+ Widget _buildSecondPage() {
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
 
-              Image.asset(
-                'assets/logos/logo_silent_signal.png',
-                height: 100,
-                width: 100,
+            // 🏛 Crime Form Title (Outside Box Shadow)
+            Text(
+              'CRIME FORM',
+              style: TextStyle(
+                color: Colors.grey[800],
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
+            ),
 
-              const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
-              Text(
-                'CRIME FORM',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-
-              const SizedBox(height: 50),
-
-          Container(
-  padding: const EdgeInsets.all(20),
-  margin: const EdgeInsets.symmetric(horizontal: 40),
-  decoration: BoxDecoration(
-    border: Border.all(
-      color: Colors.grey[300]!,
-      width: 1,
-    ),
-    borderRadius: BorderRadius.circular(10),
-    color: Colors.white,
-    boxShadow: [
-    BoxShadow(
-      color: Colors.grey.withOpacity(0.2),
-      spreadRadius: 2,
-      blurRadius: 5,
-      offset: const Offset(0, 2),
-    ),
-  ],
-  ),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-        'Upload An Attachment (optional)',
-        style: TextStyle(
-          fontSize: 15,
-          color: Colors.grey[800],
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      const SizedBox(height: 10),  // Added spacing between text and icons
-
-      Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 40), // Add padding around the Row
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      IconButton(
-        icon: const Icon(
-          Icons.camera_alt,
-          color: Colors.blue,
-          size: 30,
-        ),
-        onPressed: () {
-          pickFile();
-        },
-      ),
-      if(pickedfile!=null)
-        SizedBox(
-          height:80,
-          width:80,
-          child: Image.file(fileToDisplay!),
-        ),
-      IconButton(
-        icon: const Icon(
-          Icons.attachment,
-          color: Colors.blue,
-          size: 30,
-        ),
-        onPressed: () {
-          pickFile();
-        },
-      ),
-      if(pickedfile!=null)
-        SizedBox(
-          height:80,
-          width:80,
-          child: Image.file(fileToDisplay!),
-        ),
-    ],
-  ),
-),
-    ],
-  ),
-),
-
-              const SizedBox(height: 30),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SampleButton(
-                    onTap: () {
-                      _pageController.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    buttonText: "Previous",
-                    buttonColor: Colors.grey,
-                    height: 35,
-                  ),
-                  
-                  const SizedBox(width: 20),
-                  
-                  SampleButton(
-                    onTap: () {
-                      // Save second page data;
-                      
-                      // Here you can submit the complete form data
-                      _submitForm();
-                    },
-                    buttonText: "Submit",
-                    buttonColor: Colors.blue,
-                    height: 35,
+            // 📌 **Container with Border Shadow for Attachments**
+            Container(
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3), // Light shadow
+                    spreadRadius: 3,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
-            ],
-          ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Upload An Attachment (optional)',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey[800],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // 📌 Display Uploaded Files (Stacked & Inside Shadow Box)
+                  if (selectedFiles.isNotEmpty)
+                    Column(
+                      children: selectedFiles.map((file) {
+                        String fileName = file.path.split('/').last;
+
+                        // Limit filename to avoid UI breaking
+                        String displayName = fileName.length > 20
+                            ? "${fileName.substring(0, 10)}...${fileName.substring(fileName.length - 8)}"
+                            : fileName;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: file.path.endsWith('.jpg') ||
+                                  file.path.endsWith('.png') ||
+                                  file.path.endsWith('.jpeg')
+                              ? Container(
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.file(
+                                      file,
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  width: 250,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.insert_drive_file, color: Colors.blue, size: 30),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          displayName,
+                                          style: const TextStyle(fontSize: 14, color: Colors.black),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        );
+                      }).toList(),
+                    ),
+
+                  const SizedBox(height: 15),
+
+                  // 📌 **Centered Camera & Attachment Icons**
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.camera_alt, color: Colors.blue, size: 40),
+                        onPressed: pickFile,
+                      ),
+                      const SizedBox(width: 20), // Space between icons
+                      IconButton(
+                        icon: const Icon(Icons.attachment, color: Colors.blue, size: 40),
+                        onPressed: pickFile,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ), // 🏛 End of Bordered Shadow Box
+
+            const SizedBox(height: 20),
+
+            // 📌 **Previous & Submit Buttons**
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // 🔙 Previous Button
+                ElevatedButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[600], // Gray color like in the image
+                    minimumSize: const Size(130, 50),
+                  ),
+                  child: const Text(
+                    "Previous",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+
+                const SizedBox(width: 20), // Space between buttons
+
+                // ✅ Submit Button
+                ElevatedButton(
+                  onPressed: _showSuccessDialog,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    minimumSize: const Size(130, 50),
+                  ),
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
 
   void _validateAndNavigateToSecondPage() {
