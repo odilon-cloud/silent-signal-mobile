@@ -60,3 +60,4 @@ analysis_benchmark.json
 .idea
 build/
 android/app/
+.env
