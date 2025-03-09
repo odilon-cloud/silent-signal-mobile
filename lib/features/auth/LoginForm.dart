@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/SignupForm.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
+import 'package:silentsignal/services/api_service.dart';
 
 class Loginform extends StatefulWidget {
   const Loginform({super.key});
@@ -203,6 +205,7 @@ class _LoginformState extends State<Loginform> {
   }
 
   void _validateAndSubmit() {
+    FocusScope.of(context).unfocus();
     setState(() {
       showValidationErrors = true;
 
@@ -223,9 +226,22 @@ class _LoginformState extends State<Loginform> {
       _submitForm();
     }
   }
+  void _submitForm() async {
+  final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
 
-  void _submitForm() {
-    Navigator.push(
+  final response = await apiService.post(
+    endpoint: '/users/login',  
+    data: {
+      'email': emailController.text,
+      'password': passwordController.text,
+    },
+  );
+
+  print(response);
+  
+  if (response != null && response['status'] == 'success'  || response['id'] != null) {
+
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) {
         return const Scaffold(
@@ -234,6 +250,8 @@ class _LoginformState extends State<Loginform> {
       }),
     );
   }
+}
+
 
   @override
   void dispose() {
