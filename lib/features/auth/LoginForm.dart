@@ -21,6 +21,7 @@ class _LoginformState extends State<Loginform> {
   // Error message states
   String? emailError;
   String? passwordError;
+  String? loginError;
   bool showValidationErrors = false;
 
   @override
@@ -107,6 +108,19 @@ class _LoginformState extends State<Loginform> {
                 ),
 
                 const SizedBox(height: 25),
+                if (loginError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: Text(
+                      loginError!,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,6 +265,8 @@ class _LoginformState extends State<Loginform> {
     );
   }
 }
+
+
 
 
   @override
