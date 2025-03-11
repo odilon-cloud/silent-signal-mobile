@@ -231,6 +231,33 @@ class _SignupformState extends State<Signupform> {
 
   void _submitForm() {
     // Add your signup logic here
+
+     final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+
+    final response = await apiService.post(
+      endpoint: '/users',  
+      data: {
+        'email': emailController.text,
+        'password': passwordController.text,
+      },
+    );
+
+    print(response);
+    
+    if (response != null && response['status'] == 'success'  || response['id'] != null) {
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BaseLayout()),
+      );
+    } else {
+      // Handle login failure with custom message
+      print('Sign up Failed: ${response?['message'] ?? 'Unknown error'}');
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Incorrect username/password')),
+      );
+    }
     print('Form submitted with:');
     print('Email: ${emailController.text}');
     print('Name: ${nameController.text}');
