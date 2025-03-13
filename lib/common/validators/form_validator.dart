@@ -17,4 +17,17 @@ class FormValidator {
     }
     return null;
   }
+
+  static String? validatePhoneNumber(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Phone number is required';
+  }
+  
+  final phoneRegex = RegExp(r'^\+\d{1,3}\d{9,12}$');
+  if (!phoneRegex.hasMatch(value)) {
+    return 'Enter a valid phone number';
+  }
+  
+  return null;
+}
 }

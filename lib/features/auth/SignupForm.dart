@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
+import 'package:silentsignal/services/api_service.dart';
 
 class Signupform extends StatefulWidget {
   const Signupform({super.key});
@@ -13,13 +15,16 @@ class Signupform extends StatefulWidget {
 
 class _SignupformState extends State<Signupform> {
   final emailController = TextEditingController();
-  final nameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   // Error message states
   String? emailError;
   String? nameError;
+  String? phoneNumberError;
   String? passwordError;
   String? confirmPasswordError;
   bool showValidationErrors = false;
@@ -67,18 +72,94 @@ class _SignupformState extends State<Signupform> {
                   ],
                 ),
 
+                const SizedBox(height: 40),
+                
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTextField(
+                      controller: emailController, 
+                      hintText: "youremail@gmail.com", 
+                      obscureText: false,
+                      labelText: 'Email *',
+                    ),
+                    if (emailError != null && showValidationErrors)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 5),
+                        child: Text(
+                          emailError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+              const SizedBox(height: 25),
+
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTextField(
+                      controller: firstNameController, 
+                      hintText: "first name", 
+                      obscureText: false,
+                      labelText: 'First Name',
+                    ),
+                    if (nameError != null && showValidationErrors)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 5),
+                        child: Text(
+                          nameError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 const SizedBox(height: 25),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     InputTextField(
-                      controller: nameController, 
-                      hintText: "name", 
+                      controller: lastNameController, 
+                      hintText: "last name", 
                       obscureText: false,
-                      labelText: 'Full name',
+                      labelText: 'Last Name',
                     ),
                     if (nameError != null && showValidationErrors)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 5),
+                        child: Text(
+                          nameError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 25),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTextField(
+                      controller: phoneNumberController,
+                      hintText: "+2507.............", 
+                      obscureText: false,
+                      labelText: 'Phone Number',
+                    ),
+                    if (phoneNumberError != null && showValidationErrors)
                       Padding(
                         padding: const EdgeInsets.only(left: 25, top: 5),
                         child: Text(
@@ -194,11 +275,19 @@ class _SignupformState extends State<Signupform> {
       emailError = FormValidator.validateEmail(emailController.text);
 
       // Validate name (optional field)
-      if (nameController.text.isNotEmpty && nameController.text.length < 2) {
+      if (firstNameController.text.isNotEmpty && firstNameController.text.length < 2) {
         nameError = 'Name must be at least 2 characters';
       } else {
         nameError = null;
       }
+      // Validate name (optional field)
+      if (lastNameController.text.isNotEmpty && lastNameController.text.length < 2) {
+        nameError = 'Name must be at least 2 characters';
+      } else {
+        nameError = null;
+      }
+
+      phoneNumberError = FormValidator.validatePhoneNumber(phoneNumberController.text);
 
       // Validate password
       if (passwordController.text.isEmpty) {
@@ -223,13 +312,14 @@ class _SignupformState extends State<Signupform> {
     if (emailError == null && 
         nameError == null && 
         passwordError == null && 
+        phoneNumberError == null &&
         confirmPasswordError == null) {
       // Proceed with signup
       _submitForm();
     }
   }
 
-  void _submitForm() {
+  void _submitForm() async {
     // Add your signup logic here
 
      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
@@ -238,7 +328,12 @@ class _SignupformState extends State<Signupform> {
       endpoint: '/users',  
       data: {
         'email': emailController.text,
-        'password': passwordController.text,
+        'userPassword': passwordController.text,
+        'firstName' : firstNameController.text,
+        'lastName': lastNameController.text,
+        'role':'user',
+        'phone_number': phoneNumberController.text,
+        'isFirstLogin': false
       },
     );
 
@@ -248,7 +343,7 @@ class _SignupformState extends State<Signupform> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const BaseLayout()),
+        MaterialPageRoute(builder: (context) => const Loginform()),
       );
     } else {
       // Handle login failure with custom message
@@ -260,14 +355,15 @@ class _SignupformState extends State<Signupform> {
     }
     print('Form submitted with:');
     print('Email: ${emailController.text}');
-    print('Name: ${nameController.text}');
     print('Password: ${passwordController.text}');
   }
 
   @override
   void dispose() {
     emailController.dispose();
-    nameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    phoneNumberController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
