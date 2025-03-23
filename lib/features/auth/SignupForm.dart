@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:passwordfield/passwordfield.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
@@ -48,59 +49,6 @@ class _SignupformState extends State<Signupform> {
                 ),
 
                 const SizedBox(height: 40),
-                
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InputTextField(
-                      controller: emailController, 
-                      hintText: "youremail@gmail.com", 
-                      obscureText: false,
-                      labelText: 'Email *',
-                    ),
-                    if (emailError != null && showValidationErrors)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 5),
-                        child: Text(
-                          emailError!,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-
-                const SizedBox(height: 40),
-                
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InputTextField(
-                      controller: emailController, 
-                      hintText: "youremail@gmail.com", 
-                      obscureText: false,
-                      labelText: 'Email *',
-                    ),
-                    if (emailError != null && showValidationErrors)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 5),
-                        child: Text(
-                          emailError!,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-
-                const SizedBox(height: 25),
-
-              const SizedBox(height: 25),
-
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,6 +96,31 @@ class _SignupformState extends State<Signupform> {
                       ),
                   ],
                 ),
+                const SizedBox(height: 40),
+                
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTextField(
+                      controller: emailController, 
+                      hintText: "youremail@gmail.com", 
+                      obscureText: false,
+                      labelText: 'Email *',
+                    ),
+                    if (emailError != null && showValidationErrors)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, top: 5),
+                        child: Text(
+                          emailError!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+
                 const SizedBox(height: 25),
 
                 Column(
@@ -174,30 +147,58 @@ class _SignupformState extends State<Signupform> {
                 ),
 
                 const SizedBox(height: 25),
+                
 
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InputTextField(
-                      controller: passwordController,
-                      hintText: '............',
-                      obscureText: true,
-                      labelText: 'Password',
-                    ),
-                    if (passwordError != null && showValidationErrors)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25, top: 5),
-                        child: Text(
-                          passwordError!,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Password',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        PasswordField(
+                          controller: passwordController,
+                          color: Colors.grey.shade400,
+                          passwordConstraint: r'.*',
+                          hintText: '............',
+                           border: PasswordBorder(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                          //backgroundBorderRadius: BorderRadius.circular(4),
+                          ),
+                        errorMessage: 'Password is required',
+                          
+                         
+                          backgroundColor: Colors.white,
+                        ),
+                        
+                      ],
+                    ),
+                  ),
+                  if (passwordError != null && showValidationErrors)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, top: 5),
+                      child: Text(
+                        passwordError!,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
                       ),
-                  ],
-                ),
-                
+                    ),
+                ],
+              ),
                 const SizedBox(height: 25),
 
                 Column(
