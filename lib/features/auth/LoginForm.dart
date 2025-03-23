@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:silentsignal/providers/user_provider.dart';
+import 'package:silentsignal/providers/token_provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/textfield.dart';
@@ -242,18 +247,33 @@ class _LoginformState extends State<Loginform> {
   }
   void _submitForm() async {
   final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+  String deviceType =  'Mobile';
 
   final response = await apiService.post(
     endpoint: '/users/login',  
     data: {
       'email': emailController.text,
       'password': passwordController.text,
+      'deviceType': deviceType
     },
   );
 
   print(response);
   
-  if (response != null && response['status'] == 'success'  || response['id'] != null) {
+  if (response != null && response['status'] == 'success'  || response['token'] != null) {
+
+    // Save the token to SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('auth_token', response['token']);
+
+    // Save user information to SharedPreferences
+    prefs.setString('user_info', jsonEncode(response['user']));
+
+    // Set user information in the UserProvider
+    Provider.of<UserProvider>(context, listen: false).setUser(response['user']);
+
+    // Set the token immediately in the provider
+    Provider.of<TokenProvider>(context, listen: false).setToken(response['token']);
 
     Navigator.pushReplacement(
       context,

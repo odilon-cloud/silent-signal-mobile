@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:silentsignal/features/crime_report_form.dart';
+import 'package:silentsignal/providers/user_provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context); // Get user provider
+    final String rawUsername = userProvider.user?['first_name'] ?? "Anonymous";
+    final String username = toBeginningOfSentenceCase(rawUsername) ?? "Anonymous";
+
+    String getGreeting() {
+    final hour = DateTime.now().hour;
+
+      if (hour >= 6 && hour < 12) {
+        return 'Good Morning,';
+      } else if (hour >= 12 && hour < 18) {
+        return 'Good Afternoon,';
+      } else {
+        return 'Good Evening,';
+      }
+    }
+    
     return Scaffold(
       body: Center(
         child: Padding(
@@ -13,21 +32,21 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Align(
+               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                      Text(
-                      'Good Afternoon,',
-                      style: TextStyle(
+                      getGreeting(),
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.normal
                       )
-                    ),
+                     ),
                     Text(
-                      'Anonymous',
-                      style: TextStyle(
+                      username,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold
                       ),
