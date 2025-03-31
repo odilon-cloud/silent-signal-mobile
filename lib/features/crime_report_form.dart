@@ -1,10 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/datefield.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
 import 'dart:io';
+import 'package:silentsignal/services/api_service.dart';
 
 class CrimeFormData {
   String? subject;
@@ -75,27 +78,6 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   String? subjectError;
   String? descriptionError;
   String? dateError;
-
-  void _showSuccessDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Success"),
-        content: const Text("Your form has been submitted successfully."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // ✅ Close dialog
-              _pageController.jumpToPage(0); // ✅ Go back to the first page
-            },
-            child: const Text("OK"),
-          ),
-        ],
-      );
-    },
-  );
-}
 
 
   @override
@@ -277,34 +259,36 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-
-            // 🏛 Crime Form Title (Outside Box Shadow)
-            Text(
-              'CRIME FORM',
-              style: TextStyle(
-                color: Colors.grey[800],
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+              Text(
+                'CRIME FORM',
+                style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 50),
 
-            // 📌 **Container with Border Shadow for Attachments**
-            Container(
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3), // Light shadow
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
+          Container(
+  padding: const EdgeInsets.all(20),
+  margin: const EdgeInsets.symmetric(horizontal: 40),
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: Colors.grey[300]!,
+      width: 1,
+    ),
+    borderRadius: BorderRadius.circular(10),
+    color: Colors.white,
+    boxShadow: [
+    BoxShadow(
+      color: Colors.grey.withOpacity(0.2),
+      spreadRadius: 2,
+      blurRadius: 5,
+      offset: Offset(0, 2),
+    ),
+  ],
+  ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -437,7 +421,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
 
                 // ✅ Submit Button
                 ElevatedButton(
-                  onPressed: _showSuccessDialog,
+                  onPressed: _submitForm,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     minimumSize: const Size(130, 50),
@@ -495,14 +479,107 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     }
   }
 
-    void _submitForm() {
-    // Here you can handle the form submission with all the data in _formData
-    print('Submitting form with data:');
-    print('Subject: ${_formData.subject}');
-    print('Date: ${_formData.date}');
-    print('Description: ${_formData.crimeDescription}');
-    print('Location Enabled: ${_formData.isLocationEnabled}');
-    }
+    Future<void> _submitForm() async {
+
+      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+  final response = await apiService.post(
+    endpoint: '/crimeReports',  
+    data: {
+      'subject_name': _formData.subject,
+      'description': _formData.crimeDescription,
+      'crime_type': _formData.subject,
+      'crime_category': _formData.subject,
+      'longitude': 0,
+      'latitude': 0,
+      'status': "pending",
+      'user_id': 1,
+  
+    },
+
+  );
+  print(response);
+  if (response != null && response['reference_token'] != null  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          // title: Row(
+          //   children: [
+          //     Icon(
+          //       Icons.check_circle,
+          //       color: Colors.green,
+          //       size: 28,
+          //     ),
+          //     SizedBox(width: 10),
+          //     Text('Success'),
+          //   ],
+          // ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 15),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 60,
+                ),
+              ),
+              SizedBox(height: 15),
+              Text(
+                'Your report has been submitted successfully.',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const BaseLayout()),
+                );
+              },
+            ),
+          ],
+        );
+        // return AlertDialog(
+        //   title: const Text('Report Submitted'),
+        //   content: const Text('Your report has beensubmitted successfully. You will be redirected to the Home page.'),
+        //   actions: [
+        //     TextButton(
+        //       child: const Text('OK'),
+        //       onPressed: () {
+        //         Navigator.of(context).pop(); // Dismiss the dialog
+        //         Navigator.pushReplacement(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => const BaseLayout()),
+        //         );
+        //       },
+        //     ),
+        //   ],
+        // );
+      },
+    );
+
+  }
+
+  }
 
   @override
   void dispose() {

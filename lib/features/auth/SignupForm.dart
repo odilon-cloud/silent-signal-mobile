@@ -316,8 +316,27 @@ class _SignupformState extends State<Signupform> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Account Created'),
-          content: const Text('Your account has been successfully created. You will be redirected to the login page.'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 15),
+              Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 60,
+                ),
+              ),
+              SizedBox(height: 15),
+               Text('Account Created successfully!'),
+            ],
+          ),
           actions: [
             TextButton(
               child: const Text('OK'),
