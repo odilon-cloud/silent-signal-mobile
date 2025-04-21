@@ -1,3 +1,101 @@
+// import 'package:flutter/material.dart';
+// import 'package:silentsignal/common/components/community_page.dart';
+// import 'package:silentsignal/common/components/emergency_page.dart';
+// import 'package:silentsignal/common/components/event_page.dart';
+// import 'package:silentsignal/common/components/homepage.dart';
+// import 'package:silentsignal/common/components/profile_page.dart';
+
+// class BaseLayout extends StatefulWidget {
+//   const BaseLayout({super.key});
+
+//   @override
+//   State<BaseLayout> createState() => _BaseLayoutState();
+// }
+
+// class _BaseLayoutState extends State<BaseLayout> {
+//   int _selectedIndex = 0;
+
+//   // Add your pages here
+//   final List<Widget> _pages = [
+//     const HomePage(),
+//     const CommunityPage(),
+//     const EmergencyPage(),
+//     const EventsPage(),
+//     const ProfilePage(),
+    
+//   ];
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false, // remove back arrow 
+//         elevation: 0,
+//         toolbarHeight: kToolbarHeight + 60, // Base height plus logo height
+//         title: Column(
+//           mainAxisSize: MainAxisSize.min, // This is key - only use minimum space needed
+//           children: [
+//             Image.asset(
+//               'assets/logos/logo_silent_signal.png',
+//               height: 60,
+//               width: 60,
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.only(top: 8.0),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   CircleAvatar(
+//                     backgroundImage: AssetImage('assets/profile.png'),
+//                   ),
+//                   const Icon(Icons.notifications_none_rounded, color: Colors.black, size: 35),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//       body: SafeArea(
+//         child: _pages[_selectedIndex],
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         currentIndex: _selectedIndex,
+//         onTap: (index) {
+//           setState(() {
+//             _selectedIndex = index;
+//           });
+//         },
+//         selectedItemColor: Colors.blue,
+//         unselectedItemColor: Colors.grey,
+//         type: BottomNavigationBarType.fixed,
+//         items: const [
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label: 'Home',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.bar_chart),
+//             label: 'Community',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.alarm_sharp),
+//             label: '',
+//           ),
+//            BottomNavigationBarItem(
+//             icon: Icon(Icons.emoji_events),
+//             label: 'Events',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.person),
+//             label: 'Profile',
+//           ),
+         
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:silentsignal/common/components/community_page.dart';
 import 'package:silentsignal/common/components/emergency_page.dart';
@@ -22,8 +120,37 @@ class _BaseLayoutState extends State<BaseLayout> {
     const EmergencyPage(),
     const EventsPage(),
     const ProfilePage(),
-    
   ];
+
+  void _openProfileImage() {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false, // Remove default back button
+          actions: [
+            // Add X button in the corner
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Hero(
+            tag: 'profileImage',
+            child: Image.asset(
+              'assets/profile.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +213,7 @@ class _BaseLayoutState extends State<BaseLayout> {
             icon: Icon(Icons.alarm_sharp),
             label: '',
           ),
-           BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.emoji_events),
             label: 'Events',
           ),
@@ -94,10 +221,8 @@ class _BaseLayoutState extends State<BaseLayout> {
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
-         
         ],
       ),
     );
   }
 }
-
