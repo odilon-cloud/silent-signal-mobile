@@ -9,4 +9,8 @@ class TokenProvider with ChangeNotifier {
     _token = token;
     notifyListeners();
   }
+  void clearToken() {
+  _token = null; // Assuming _token is your token variable
+  notifyListeners();
+}
 }
