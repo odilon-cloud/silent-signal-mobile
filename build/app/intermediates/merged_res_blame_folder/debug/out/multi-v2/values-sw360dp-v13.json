@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-39:/values-sw360dp-v13/values-sw360dp-v13.xml",
+            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-41:/values-sw360dp-v13/values-sw360dp-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-3\\6bae31589c9f0a7a46362df41f65a3a3\\transformed\\preference-1.2.1\\res\\values-sw360dp-v13\\values-sw360dp-v13.xml",

@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/datefield.dart';
@@ -16,6 +18,8 @@ class CrimeFormData {
   String? crimeDescription;
   String? date;
   bool isLocationEnabled;
+  double? latitude;
+  double? longitude;
 
   
   CrimeFormData({
@@ -23,6 +27,8 @@ class CrimeFormData {
     this.crimeDescription,
     this.date,
     this.isLocationEnabled = false,
+    this.latitude,
+    this.longitude,
   });
 }
 
@@ -228,11 +234,18 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
                             color: _formData.isLocationEnabled ? Colors.blue : Colors.grey,
                             size: 70,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               _formData.isLocationEnabled = !_formData.isLocationEnabled;
                             });
-                          },
+
+                            if (_formData.isLocationEnabled) {
+                              await _getCurrentLocation();
+                            } else {
+                              _formData.latitude = null;
+                              _formData.longitude = null;
+                            }
+                          }
                         ),
                       ],
                     ),
@@ -498,15 +511,15 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         'description': _formData.crimeDescription,
         'crime_type': _formData.subject,
         'crime_category': _formData.subject,
-        'longitude': 0,
-        'latitude': 0,
+        'longitude': _formData.longitude ?? 0,
+        'latitude': _formData.latitude ?? 0,    
         'status': "pending",
-        'user_id': userProvider.user?['id'] ?? Null ,
+        'user_id': userProvider.user?['id'] ,
     
       },
 
     );
-    
+    print('Getting response');
     print(response);
     setState(() {
     _isSubmitting = false;
@@ -575,4 +588,47 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     dateController.dispose();
     super.dispose();
   }
+  Future<void> _getCurrentLocation() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  // Check if location services are enabled
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Location services are disabled.')),
+    );
+    return;
+  }
+
+  // Check for permission
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Location permission denied.')),
+      );
+      return;
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Location permissions are permanently denied.')),
+    );
+    return;
+  }
+
+  // Get current position
+  final position = await Geolocator.getCurrentPosition(
+    desiredAccuracy: LocationAccuracy.high,
+  );
+
+  setState(() {
+    _formData.latitude = position.latitude;
+    _formData.longitude = position.longitude;
+  });
+}
+
 }
