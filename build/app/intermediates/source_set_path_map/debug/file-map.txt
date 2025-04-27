@@ -42,7 +42,9 @@ com.silentsignal.silentsignal.app-resValues-40 C:\Users\admin\Desktop\school\sil
 com.silentsignal.silentsignal.app-packageDebugResources-41 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
 com.silentsignal.silentsignal.app-packageDebugResources-42 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
 com.silentsignal.silentsignal.app-merged_res-43 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\app\intermediates\merged_res\debug
-com.silentsignal.silentsignal.app-packaged_res-44 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_native_splash\intermediates\packaged_res\debug
-com.silentsignal.silentsignal.app-packaged_res-45 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\geolocator_android\intermediates\packaged_res\debug
-com.silentsignal.silentsignal.app-packaged_res-46 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\permission_handler_android\intermediates\packaged_res\debug
-com.silentsignal.silentsignal.app-packaged_res-47 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\shared_preferences_android\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-44 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\file_picker\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-45 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_native_splash\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-46 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-47 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\geolocator_android\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-48 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\permission_handler_android\intermediates\packaged_res\debug
+com.silentsignal.silentsignal.app-packaged_res-49 C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\shared_preferences_android\intermediates\packaged_res\debug

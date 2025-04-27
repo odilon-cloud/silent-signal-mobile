@@ -29,19 +29,12 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-<<<<<<< HEAD
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-=======
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
->>>>>>> 152ad09 (integrated login feature)
     }
-   
+    kotlinOptions {
+        jvmTarget = "21"
+    }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.silentsignal.silentsignal"
