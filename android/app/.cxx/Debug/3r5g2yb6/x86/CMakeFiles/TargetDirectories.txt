@@ -1,0 +1,2 @@
+C:/Users/25078/Desktop/IMPORTANT/WORK/MOBILE_SILENT_SIGNAL/silent-signal-mobile/android/app/.cxx/Debug/3r5g2yb6/x86/CMakeFiles/edit_cache.dir
+C:/Users/25078/Desktop/IMPORTANT/WORK/MOBILE_SILENT_SIGNAL/silent-signal-mobile/android/app/.cxx/Debug/3r5g2yb6/x86/CMakeFiles/rebuild_cache.dir
