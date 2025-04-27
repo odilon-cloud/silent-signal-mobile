@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/datefield.dart';
@@ -8,12 +9,14 @@ import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
 import 'dart:io';
 import 'package:silentsignal/services/api_service.dart';
+import 'package:silentsignal/providers/user_provider.dart';
 
 class CrimeFormData {
   String? subject;
   String? crimeDescription;
   String? date;
   bool isLocationEnabled;
+
   
   CrimeFormData({
     this.subject,
@@ -69,6 +72,8 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   }
 
 
+  bool _isSubmitting = false;
+  
   // First page controllers
   final subjectController = TextEditingController();
   final crimeDescriptionController = TextEditingController();
@@ -480,24 +485,32 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   }
 
     Future<void> _submitForm() async {
+      setState(() {
+    _isSubmitting = true;
+  });
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
 
       final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
-  final response = await apiService.post(
-    endpoint: '/crimeReports',  
-    data: {
-      'subject_name': _formData.subject,
-      'description': _formData.crimeDescription,
-      'crime_type': _formData.subject,
-      'crime_category': _formData.subject,
-      'longitude': 0,
-      'latitude': 0,
-      'status': "pending",
-      'user_id': 1,
-  
-    },
+    final response = await apiService.post(
+      endpoint: '/crimeReports',  
+      data: {
+        'subject_name': _formData.subject,
+        'description': _formData.crimeDescription,
+        'crime_type': _formData.subject,
+        'crime_category': _formData.subject,
+        'longitude': 0,
+        'latitude': 0,
+        'status': "pending",
+        'user_id': userProvider.user?['id'] ?? Null ,
+    
+      },
 
-  );
-  print(response);
+    );
+    
+    print(response);
+    setState(() {
+    _isSubmitting = false;
+  });
   if (response != null && response['reference_token'] != null  ) {
     showDialog(
       context: context,
@@ -507,17 +520,6 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          // title: Row(
-          //   children: [
-          //     Icon(
-          //       Icons.check_circle,
-          //       color: Colors.green,
-          //       size: 28,
-          //     ),
-          //     SizedBox(width: 10),
-          //     Text('Success'),
-          //   ],
-          // ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -525,18 +527,18 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
               Container(
                 width: 100,
                 height: 100,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.green,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check,
                   color: Colors.white,
                   size: 60,
                 ),
               ),
-              SizedBox(height: 15),
-              Text(
+              const SizedBox(height: 15),
+              const Text(
                 'Your report has been submitted successfully.',
                 textAlign: TextAlign.center,
               ),
@@ -544,7 +546,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           ),
           actions: [
             TextButton(
-              child: Text(
+              child: const Text(
                 'OK',
                 style: TextStyle(color: Colors.green),
               ),
@@ -558,22 +560,6 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
             ),
           ],
         );
-        // return AlertDialog(
-        //   title: const Text('Report Submitted'),
-        //   content: const Text('Your report has beensubmitted successfully. You will be redirected to the Home page.'),
-        //   actions: [
-        //     TextButton(
-        //       child: const Text('OK'),
-        //       onPressed: () {
-        //         Navigator.of(context).pop(); // Dismiss the dialog
-        //         Navigator.pushReplacement(
-        //           context,
-        //           MaterialPageRoute(builder: (context) => const BaseLayout()),
-        //         );
-        //       },
-        //     ),
-        //   ],
-        // );
       },
     );
 
