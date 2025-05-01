@@ -60,7 +60,8 @@ class _BaseLayoutState extends State<BaseLayout> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120), // Adjust height as needed
         child: AppBar(
-          //backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: Column(
             children: [

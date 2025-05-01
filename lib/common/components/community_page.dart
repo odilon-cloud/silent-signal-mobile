@@ -138,7 +138,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -150,20 +149,16 @@ class CommunityPost {
   final String title;
   final String content;
   final String thumbnail;
-  final String? authorName; // Optional for displaying who posted
-  final String? timeAgo; // Optional for displaying when posted
-  final int? likes;
-  final int? comments;
+  final String authorName; // Default will be set to "Pigeon Car"
+  final String? timeAgo;
   
   CommunityPost({
     required this.userId,
     required this.title,
     required this.content,
     required this.thumbnail,
-    this.authorName,
+    this.authorName = "Pigeon Car", // Default author name
     this.timeAgo,
-    this.likes,
-    this.comments,
   });
 }
 
@@ -225,17 +220,19 @@ class _CommunityPageState extends State<CommunityPage> {
       );
       print(response);
       
-      if (response['success'] == true && response['data'] != null) {
-        final fetchedPosts = (response['data'] as List)
+      if (response != null) {
+        final fetchedPosts = (response as List)
             .map((postData) => CommunityPost(
-                  userId: postData['user_id'] ,
+                  userId: postData['user_id'],
                   title: postData['title'] ?? '',
                   content: postData['content'] ?? '',
                   thumbnail: postData['thumbnail'] ?? '',
-                  authorName: postData['authorName'],
-                  timeAgo: _calculateTimeAgo(postData['createdAt']),
-                  likes: postData['likesCount'],
-                  comments: postData['commentsCount'],
+                  // Default "Pigeon Car" will be used if not overridden
+                  authorName: postData['authorName'] ?? "Pigeon Car",
+                  // Using the correct field name created_at (with underscore) as per backend schema
+                  timeAgo: postData['created_at'] != null 
+                      ? _calculateTimeAgo(postData['created_at'])
+                      : 'Just now',
                 ))
             .toList();
             
@@ -263,17 +260,28 @@ class _CommunityPageState extends State<CommunityPage> {
   
   // Helper function to convert timestamps to "time ago" format
   String _calculateTimeAgo(dynamic timestamp) {
-    if (timestamp == null) return 'Unknown time';
+    if (timestamp == null) return 'Just now';
     
     DateTime postTime;
     try {
       // Handle different timestamp formats
       if (timestamp is String) {
+        // ISO format from database (created_at DateTime @default(now()))
         postTime = DateTime.parse(timestamp);
       } else if (timestamp is int) {
         postTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      } else if (timestamp is Map) {
+        // Handle potential nested timestamp objects
+        if (timestamp['_seconds'] != null) {
+          // Firestore timestamp format
+          int seconds = timestamp['_seconds'];
+          int nanoseconds = timestamp['_nanoseconds'] ?? 0;
+          postTime = DateTime.fromMillisecondsSinceEpoch(seconds * 1000 + (nanoseconds ~/ 1000000));
+        } else {
+          return 'Just now';
+        }
       } else {
-        return 'Unknown time';
+        return 'Just now';
       }
       
       final difference = DateTime.now().difference(postTime);
@@ -290,7 +298,8 @@ class _CommunityPageState extends State<CommunityPage> {
         return '${(difference.inDays / 7).floor()}w ago';
       }
     } catch (e) {
-      return 'Unknown time';
+      print('Error calculating time ago: $e');
+      return 'Just now';
     }
   }
 
@@ -338,7 +347,7 @@ class _CommunityPageState extends State<CommunityPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _fetchPosts,
+        onPressed: () => _fetchPosts(),
         child: const Icon(Icons.refresh),
       ),
     );
@@ -415,89 +424,60 @@ class CommunityPostWidget extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           
-          // Author and time info if available
-          if (post.authorName != null || post.timeAgo != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                children: [
-                  if (post.authorName != null)
-                    Text(
-                      post.authorName!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey,
+          // Author and time info
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Row(
+              children: [
+                Text(
+                  post.authorName, // Now always available with default value
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                  ),
+                ),
+                if (post.timeAgo != null)
+                  Row(
+                    children: [
+                      const SizedBox(width: 6),
+                      Text(
+                        post.timeAgo!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                  if (post.authorName != null && post.timeAgo != null)
-                    const SizedBox(width: 6),
-                  if (post.timeAgo != null)
-                    Text(
-                      post.timeAgo!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
-                ],
-              ),
+                    ],
+                  ),
+              ],
             ),
+          ),
           
           // Interaction buttons
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Left side: Like and Comment icons
               Row(
                 children: [
-                  // Like button with count
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.thumb_up_outlined,
-                        size: 20,
-                        color: Colors.grey,
-                      ),
-                      if (post.likes != null && post.likes! > 0)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: Text(
-                            '${post.likes}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                    ],
+                  // Like button (icon only)
+                  Icon(
+                    Icons.thumb_up_outlined,
+                    size: 20,
+                    color: Colors.grey,
                   ),
-                  const SizedBox(width: 12),
-                  // Comment button with count
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.chat_bubble_outline,
-                        size: 20,
-                        color: Colors.grey,
-                      ),
-                      if (post.comments != null && post.comments! > 0)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: Text(
-                            '${post.comments}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                    ],
+                  SizedBox(width: 12),
+                  // Comment button (icon only)
+                  Icon(
+                    Icons.chat_bubble_outline,
+                    size: 20,
+                    color: Colors.grey,
                   ),
                 ],
               ),
               // Right side: Share icon
-              const Icon(
+              Icon(
                 Icons.share_outlined,
                 size: 20,
                 color: Colors.grey,
