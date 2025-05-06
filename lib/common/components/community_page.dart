@@ -314,7 +314,7 @@ class _CommunityPageState extends State<CommunityPage> {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Community',  // Fixed typo from 'Commnity'
+                'Community',  
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold
@@ -347,8 +347,8 @@ class _CommunityPageState extends State<CommunityPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _fetchPosts(),
-        child: const Icon(Icons.refresh),
+        onPressed: () => {},
+        child: const Icon(Icons.edit_outlined),
       ),
     );
   }
@@ -478,7 +478,7 @@ class CommunityPostWidget extends StatelessWidget {
               ),
               // Right side: Share icon
               Icon(
-                Icons.share_outlined,
+                Icons.forward_10_outlined,
                 size: 20,
                 color: Colors.grey,
               ),
