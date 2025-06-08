@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:passwordfield/passwordfield.dart';
 import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/password_field.dart';
 import 'package:silentsignal/common/components/textfield.dart';

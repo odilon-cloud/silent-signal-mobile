@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-41:/values-uz/values-uz.xml",
+            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-43:/values-uz/values-uz.xml",
             "map": [
                 {
                     "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-3\\50e87a47f8e7df2f23b0bf9be9761a01\\transformed\\core-1.13.1\\res\\values-uz\\values-uz.xml",

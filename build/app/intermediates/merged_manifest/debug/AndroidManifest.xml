@@ -30,8 +30,14 @@
             <action android:name="android.intent.action.GET_CONTENT" />
 
             <data android:mimeType="*/*" />
-        </intent>
-    </queries>
+        </intent> <!-- Needs to be explicitly declared on Android R+ -->
+        <package android:name="com.google.android.apps.maps" />
+    </queries> <!-- Include required permissions for Google Maps API to run. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <permission
         android:name="com.silentsignal.silentsignal.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -91,6 +97,9 @@
             android:required="false" />
         <uses-library
             android:name="androidx.window.sidecar"
+            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+        <uses-library
+            android:name="org.apache.http.legacy"
             android:required="false" />
 
         <activity

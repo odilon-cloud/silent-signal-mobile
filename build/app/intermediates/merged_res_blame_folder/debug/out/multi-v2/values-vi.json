@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-41:/values-vi/values-vi.xml",
+            "outputFile": "com.silentsignal.silentsignal.app-mergeDebugResources-43:/values-vi/values-vi.xml",
             "map": [
                 {
                     "source": "C:\\Users\\admin\\.gradle\\caches\\transforms-3\\89c23ce74f280d0fa31e8f6952bf5215\\transformed\\jetified-play-services-base-18.3.0\\res\\values-vi\\values.xml",

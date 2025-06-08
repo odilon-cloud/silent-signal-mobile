@@ -8,6 +8,8 @@ MERGED from [com.google.android.gms:play-services-location:21.2.0] C:\Users\admi
 MERGED from [com.google.android.gms:play-services-location:21.2.0] C:\Users\admin\.gradle\caches\transforms-3\bf812629bae5d3894e2c384728c337be\transformed\jetified-play-services-location-21.2.0\AndroidManifest.xml:7:5-20
 MERGED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:36:5-42:19
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:36:5-42:19
 MERGED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:19:5-23:19
 MERGED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:19:5-23:19
 MERGED from [com.google.android.gms:play-services-tasks:18.1.0] C:\Users\admin\.gradle\caches\transforms-3\d5af586c8f2dd8fd25431a80bd14637d\transformed\jetified-play-services-tasks-18.1.0\AndroidManifest.xml:5:5-20
@@ -24,6 +26,8 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\admin\.gradle\cach
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\admin\.gradle\caches\transforms-3\6d1d0f553f0ac80ef7b092fe4146c7c1\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-3\e6498cc219d47569f44a03113b54e916\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\admin\.gradle\caches\transforms-3\e6498cc219d47569f44a03113b54e916\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:7:5-11:19
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:7:5-11:19
 	android:extractNativeLibs
 		INJECTED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\debug\AndroidManifest.xml
 	android:appComponentFactory
@@ -38,6 +42,7 @@ INJECTED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\a
 INJECTED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 MERGED from [:file_picker] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\file_picker\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:flutter_native_splash] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:google_maps_flutter_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\google_maps_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:geolocator_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-15:12
 MERGED from [:permission_handler_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
@@ -49,6 +54,7 @@ MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] C:\Users\admin\.gradl
 MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\2479c4b347a6878a7ec8d274d9cb1a7d\transformed\slidingpanelayout-1.2.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:17:1-31:12
 MERGED from [androidx.window:window-java:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\c4ded58d26d7dbbed1a17fa2ba1d6e73\transformed\jetified-window-java-1.2.0\AndroidManifest.xml:17:1-21:12
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:17:1-44:12
 MERGED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:16:1-24:12
 MERGED from [com.google.android.gms:play-services-tasks:18.1.0] C:\Users\admin\.gradle\caches\transforms-3\d5af586c8f2dd8fd25431a80bd14637d\transformed\jetified-play-services-tasks-18.1.0\AndroidManifest.xml:2:1-6:12
 MERGED from [com.google.android.gms:play-services-basement:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\603846afb6f0967d4fe1cef79ef2aecd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:16:1-26:12
@@ -97,6 +103,7 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\admin\.gradle\ca
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\admin\.gradle\caches\transforms-3\40a73ba2c6e52bf37c9a6f17e897cc65\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\admin\.gradle\caches\transforms-3\a3a204af613bbccdd544f3bd45808432\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\admin\.gradle\caches\transforms-3\8d89a8bdf5fefe5d62b098065a3cd598\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:2:1-13:12
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] C:\Users\admin\.gradle\caches\transforms-3\ff0195f1658094e5f0a7f88a9596f331\transformed\jetified-relinker-1.4.5\AndroidManifest.xml:2:1-7:12
 	package
 		INJECTED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\debug\AndroidManifest.xml
@@ -110,12 +117,16 @@ uses-permission#android.permission.INTERNET
 ADDED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:2:5-66
 MERGED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:2:5-66
 MERGED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:2:5-66
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:24:5-67
 	android:name
 		ADDED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:2:22-64
 queries
 ADDED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:40:5-45:15
 MERGED from [:file_picker] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\file_picker\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-13:15
 MERGED from [:file_picker] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\file_picker\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-13:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:30:5-34:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:30:5-34:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
 ADDED from C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\android\app\src\main\AndroidManifest.xml:41:9-44:18
 action#android.intent.action.PROCESS_TEXT
@@ -134,6 +145,8 @@ MERGED from [:file_picker] C:\Users\admin\Desktop\school\silent signal\silent-si
 MERGED from [:file_picker] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\file_picker\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_native_splash] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_native_splash] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_native_splash\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:google_maps_flutter_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\google_maps_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:google_maps_flutter_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\google_maps_flutter_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:geolocator_android] C:\Users\admin\Desktop\school\silent signal\silent-signal-mobile\build\geolocator_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
@@ -156,6 +169,8 @@ MERGED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transfo
 MERGED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.window:window-java:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\c4ded58d26d7dbbed1a17fa2ba1d6e73\transformed\jetified-window-java-1.2.0\AndroidManifest.xml:19:5-44
 MERGED from [androidx.window:window-java:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\c4ded58d26d7dbbed1a17fa2ba1d6e73\transformed\jetified-window-java-1.2.0\AndroidManifest.xml:19:5-44
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:18:5-43
 MERGED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:18:5-43
 MERGED from [com.google.android.gms:play-services-tasks:18.1.0] C:\Users\admin\.gradle\caches\transforms-3\d5af586c8f2dd8fd25431a80bd14637d\transformed\jetified-play-services-tasks-18.1.0\AndroidManifest.xml:4:5-43
@@ -252,6 +267,8 @@ MERGED from [androidx.print:print:1.0.0] C:\Users\admin\.gradle\caches\transform
 MERGED from [androidx.print:print:1.0.0] C:\Users\admin\.gradle\caches\transforms-3\a3a204af613bbccdd544f3bd45808432\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\admin\.gradle\caches\transforms-3\8d89a8bdf5fefe5d62b098065a3cd598\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\admin\.gradle\caches\transforms-3\8d89a8bdf5fefe5d62b098065a3cd598\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:5:5-44
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] C:\Users\admin\.gradle\caches\transforms-3\ff0195f1658094e5f0a7f88a9596f331\transformed\jetified-relinker-1.4.5\AndroidManifest.xml:5:5-43
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] C:\Users\admin\.gradle\caches\transforms-3\ff0195f1658094e5f0a7f88a9596f331\transformed\jetified-relinker-1.4.5\AndroidManifest.xml:5:5-43
 	android:targetSdkVersion
@@ -286,6 +303,26 @@ ADDED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transfor
 		ADDED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
 	android:name
 		ADDED from [androidx.window:window:1.2.0] C:\Users\admin\.gradle\caches\transforms-3\7b81fa13529227b59a989f306184a0f2\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:23:5-79
+	android:name
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:23:22-76
+uses-feature#0x00020000
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:26:5-28:35
+	android:glEsVersion
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:27:9-41
+	android:required
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:28:9-32
+package#com.google.android.apps.maps
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:9-64
+	android:name
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:33:18-61
+uses-library#org.apache.http.legacy
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:39:9-41:40
+	android:required
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:41:13-37
+	android:name
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] C:\Users\admin\.gradle\caches\transforms-3\ecc7424e6402a1354d95d249e2ff992c\transformed\jetified-play-services-maps-18.2.0\AndroidManifest.xml:40:13-50
 activity#com.google.android.gms.common.api.GoogleApiActivity
 ADDED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:20:9-22:45
 	android:exported
@@ -296,6 +333,8 @@ ADDED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gr
 		ADDED from [com.google.android.gms:play-services-base:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\89c23ce74f280d0fa31e8f6952bf5215\transformed\jetified-play-services-base-18.3.0\AndroidManifest.xml:20:19-85
 meta-data#com.google.android.gms.version
 ADDED from [com.google.android.gms:play-services-basement:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\603846afb6f0967d4fe1cef79ef2aecd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:8:9-10:69
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] C:\Users\admin\.gradle\caches\transforms-3\84413d5ab1319e50f05ea31e4a93dad2\transformed\jetified-android-maps-utils-3.6.0\AndroidManifest.xml:8:9-10:69
 	android:value
 		ADDED from [com.google.android.gms:play-services-basement:18.3.0] C:\Users\admin\.gradle\caches\transforms-3\603846afb6f0967d4fe1cef79ef2aecd\transformed\jetified-play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
 	android:name

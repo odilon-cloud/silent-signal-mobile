@@ -3,34 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
-import 'package:silentsignal/common/components/button.dart';
-import 'package:silentsignal/common/components/datefield.dart';
-import 'package:silentsignal/common/components/textfield.dart';
+import 'package:silentsignal/common/components/crime_details_form.dart';
+import 'package:silentsignal/common/components/crime_file_upload.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
 import 'dart:io';
 import 'package:silentsignal/services/api_service.dart';
 import 'package:silentsignal/providers/user_provider.dart';
+import 'package:silentsignal/common/components/crime_report_data.dart';
 
-class CrimeFormData {
-  String? subject;
-  String? crimeDescription;
-  String? date;
-  bool isLocationEnabled;
-  double? latitude;
-  double? longitude;
-
-  
-  CrimeFormData({
-    this.subject,
-    this.crimeDescription,
-    this.date,
-    this.isLocationEnabled = false,
-    this.latitude,
-    this.longitude,
-  });
-}
 
 class CrimeReportForm extends StatefulWidget {
   const CrimeReportForm({super.key});
@@ -43,16 +24,17 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   final _pageController = PageController();
   final _formData = CrimeFormData();
   bool _showValidationErrors = false;
-  List<dynamic> selectedFiles = []; // Stores both images and documents
+  List<dynamic> selectedFiles = [];
 
 
 
-  //File uploading section
   FilePickerResult? result;
   String? _fileName;
   PlatformFile? pickedfile;
   bool isLoading = false;
   File? fileToDisplay;
+  final passwordController = TextEditingController();
+  String? passwordError;
 
   void pickFile() async {
     try {
@@ -100,7 +82,29 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            _buildFirstPage(),
+            CrimeDetailsForm(
+               subjectController: subjectController,
+                dateController: dateController,
+                crimeDescriptionController: crimeDescriptionController,
+                subjectError: subjectError,
+                dateError: dateError,
+                descriptionError: descriptionError,
+                showValidationErrors: _showValidationErrors,
+                isLocationEnabled: _formData.isLocationEnabled,
+                onToggleLocation: () async {
+                  setState(() {
+                    _formData.isLocationEnabled = !_formData.isLocationEnabled;
+                  });
+
+                  if (_formData.isLocationEnabled) {
+                    await _getCurrentLocation();
+                  } else {
+                    _formData.latitude = null;
+                    _formData.longitude = null;
+                  }
+                },
+                onNext: _validateAndNavigateToSecondPage,
+            ),
             _buildSecondPage(),
           ],
         ),
@@ -108,357 +112,25 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     );
   }
 
-  Widget _buildFirstPage() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
+Widget _buildSecondPage() {
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  final bool isAnonymous = userProvider.user?['id'] == null;
 
-              Image.asset(
-                'assets/logos/logo_silent_signal.png',
-                height: 100,
-                width: 100,
-              ),
-
-              const SizedBox(height: 25),
-
-              Text(
-                'CRIME FORM',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InputTextField(
-                    controller: subjectController,
-                    hintText: 'Theft',
-                    obscureText: false,
-                    labelText: 'Subject',
-                  ),
-                  if (subjectError != null && _showValidationErrors)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 5),
-                      child: Text(
-                        subjectError!,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DateInputField(
-                    controller: dateController,
-                    hintText: 'Date of Crime',
-                    labelText: 'Date of Crime',
-                  ),
-                  if (dateError != null && _showValidationErrors)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 5),
-                      child: Text(
-                        dateError!,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: 15),
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InputTextField(
-                    controller: crimeDescriptionController,
-                    hintText: 'Provide a detailed description of the incident or crime',
-                    obscureText: false,
-                    minLines: 5,
-                    maxLines: null,
-                    labelText: 'Crime description',
-                  ),
-                  if (descriptionError != null && _showValidationErrors)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25, top: 5),
-                      child: Text(
-                        descriptionError!,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Location toggle section...
-              Padding(
-                padding: const EdgeInsets.only(left: 25),
-                child: Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Send Location (optional)',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[800],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            _formData.isLocationEnabled ? Icons.toggle_on : Icons.toggle_off,
-                            color: _formData.isLocationEnabled ? Colors.blue : Colors.grey,
-                            size: 70,
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              _formData.isLocationEnabled = !_formData.isLocationEnabled;
-                            });
-
-                            if (_formData.isLocationEnabled) {
-                              await _getCurrentLocation();
-                            } else {
-                              _formData.latitude = null;
-                              _formData.longitude = null;
-                            }
-                          }
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              SampleButton(
-                onTap: _validateAndNavigateToSecondPage,
-                buttonText: "Next",
-                buttonColor: Colors.blue,
-                height: 35,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
- Widget _buildSecondPage() {
-  return SingleChildScrollView(
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-              Text(
-                'CRIME FORM',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-
-              const SizedBox(height: 50),
-
-          Container(
-  padding: const EdgeInsets.all(20),
-  margin: const EdgeInsets.symmetric(horizontal: 40),
-  decoration: BoxDecoration(
-    border: Border.all(
-      color: Colors.grey[300]!,
-      width: 1,
-    ),
-    borderRadius: BorderRadius.circular(10),
-    color: Colors.white,
-    boxShadow: [
-    BoxShadow(
-      color: Colors.grey.withOpacity(0.2),
-      spreadRadius: 2,
-      blurRadius: 5,
-      offset: Offset(0, 2),
-    ),
-  ],
-  ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Upload An Attachment (optional)',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // 📌 Display Uploaded Files (Stacked & Inside Shadow Box)
-                  if (selectedFiles.isNotEmpty)
-                    Column(
-                      children: selectedFiles.map((file) {
-                        String fileName = file.path.split('/').last;
-
-                        // Limit filename to avoid UI breaking
-                        String displayName = fileName.length > 20
-                            ? "${fileName.substring(0, 10)}...${fileName.substring(fileName.length - 8)}"
-                            : fileName;
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: file.path.endsWith('.jpg') ||
-                                  file.path.endsWith('.png') ||
-                                  file.path.endsWith('.jpeg')
-                              ? Container(
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.file(
-                                      file,
-                                      width: 150,
-                                      height: 150,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  width: 250,
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        spreadRadius: 2,
-                                        blurRadius: 5,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(Icons.insert_drive_file, color: Colors.blue, size: 30),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          displayName,
-                                          style: const TextStyle(fontSize: 14, color: Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                        );
-                      }).toList(),
-                    ),
-
-                  const SizedBox(height: 15),
-
-                  // 📌 **Centered Camera & Attachment Icons**
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.camera_alt, color: Colors.blue, size: 40),
-                        onPressed: pickFile,
-                      ),
-                      const SizedBox(width: 20), // Space between icons
-                      IconButton(
-                        icon: const Icon(Icons.attachment, color: Colors.blue, size: 40),
-                        onPressed: pickFile,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ), // 🏛 End of Bordered Shadow Box
-
-            const SizedBox(height: 20),
-
-            // 📌 **Previous & Submit Buttons**
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // 🔙 Previous Button
-                ElevatedButton(
-                  onPressed: () {
-                    _pageController.previousPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[600], // Gray color like in the image
-                    minimumSize: const Size(130, 50),
-                  ),
-                  child: const Text(
-                    "Previous",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-
-                const SizedBox(width: 20), // Space between buttons
-
-                // ✅ Submit Button
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: const Size(130, 50),
-                  ),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ),
+  return FileUploadPage(
+    selectedFiles: selectedFiles,
+    onPickFile: pickFile,
+    onPrevious: () {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    },
+    onSubmit: _submitForm,
+    pageController: _pageController,
+    showPasswordField: isAnonymous,
+    passwordController: passwordController,
   );
 }
-
-
 
 
   void _validateAndNavigateToSecondPage() {
@@ -501,12 +173,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       setState(() {
     _isSubmitting = true;
   });
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
-    final response = await apiService.post(
-      endpoint: '/crimeReports',  
-      data: {
+      Map<String, dynamic> requestData = {
         'subject_name': _formData.subject,
         'description': _formData.crimeDescription,
         'crime_type': _formData.subject,
@@ -514,9 +181,22 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         'longitude': _formData.longitude ?? 0,
         'latitude': _formData.latitude ?? 0,    
         'status': "pending",
-        'user_id': userProvider.user?['id'] ,
-    
-      },
+      };
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final userId = userProvider.user?['id'];
+       if (userId != null) {
+        requestData['user_id'] = userId;
+      } else {
+        // Generate a random password for anonymous reports
+        requestData['password'] = passwordController;
+        // Or you could ask user to provide a password
+        // requestData['password'] = _formData.anonymousPassword; 
+      }
+
+      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+    final response = await apiService.post(
+      endpoint: '/crimeReports',  
+      data: requestData,
 
     );
     print('Getting response');
@@ -555,6 +235,45 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
                 'Your report has been submitted successfully.',
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 20),
+            const Text(
+              'Reference Token:',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey[300]!),
+              ),
+              child: SelectableText(
+                response['reference_token'],
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              'Please save this reference token to track your report status.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
             ],
           ),
           actions: [
