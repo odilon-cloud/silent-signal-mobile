@@ -4,6 +4,7 @@ import 'package:silentsignal/common/components/emergency_page.dart';
 import 'package:silentsignal/common/components/event_page.dart';
 import 'package:silentsignal/common/components/homepage.dart';
 import 'package:silentsignal/common/components/profile_page.dart';
+import 'package:silentsignal/common/components/search_report_page.dart';
 
 class BaseLayout extends StatefulWidget {
   const BaseLayout({super.key});
@@ -37,6 +38,16 @@ class _BaseLayoutState extends State<BaseLayout> {
               icon: const Icon(Icons.close, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
             ),
+            IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          // Navigate to a crime reports search page or show a dialog
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchReportPage()),
+          );
+        },
+      )
           ],
         ),
         backgroundColor: Colors.black,
