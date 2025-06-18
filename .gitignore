@@ -61,3 +61,4 @@ analysis_benchmark.json
 build/
 android/app/ 
 .env
+windows/
