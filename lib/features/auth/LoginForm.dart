@@ -40,18 +40,15 @@ class _LoginformState extends State<Loginform> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-
                 Image.asset(
                   'assets/logos/logo_silent_signal.png',
                   height: 100,
                   width: 100,
                 ),
-
                 const SizedBox(height: 40),
-
                 ElevatedButton.icon(
                   onPressed: () {
-                     Navigator.push(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
                         return const Scaffold(
@@ -73,7 +70,8 @@ class _LoginformState extends State<Loginform> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: BorderSide(color: Colors.grey.shade400),
@@ -82,9 +80,7 @@ class _LoginformState extends State<Loginform> {
                     elevation: 0,
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Row(
@@ -111,7 +107,6 @@ class _LoginformState extends State<Loginform> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 25),
                 if (loginError != null)
                   Padding(
@@ -126,7 +121,6 @@ class _LoginformState extends State<Loginform> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -149,9 +143,7 @@ class _LoginformState extends State<Loginform> {
                       ),
                   ],
                 ),
-
                 const SizedBox(height: 25),
-
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -174,18 +166,14 @@ class _LoginformState extends State<Loginform> {
                       ),
                   ],
                 ),
-
                 const SizedBox(height: 25),
-
                 SampleButton(
                   onTap: _validateAndSubmit,
                   buttonText: 'Submit',
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.7,
                 ),
-
                 const SizedBox(height: 25),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -245,49 +233,49 @@ class _LoginformState extends State<Loginform> {
       _submitForm();
     }
   }
+
   void _submitForm() async {
-  final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
-  String deviceType =  'Mobile';
+    final apiService = ApiService(
+        baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+    String deviceType = 'Mobile';
 
-  final response = await apiService.post(
-    endpoint: '/users/login',  
-    data: {
-      'email': emailController.text,
-      'password': passwordController.text,
-      'deviceType': deviceType
-    },
-  );
-
-  print(response);
-  
-  if (response != null && response['status'] == 'success'  || response['token'] != null) {
-
-    // Save the token to SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('auth_token', response['token']);
-
-    // Save user information to SharedPreferences
-    prefs.setString('user_info', jsonEncode(response['user']));
-
-    // Set user information in the UserProvider
-    Provider.of<UserProvider>(context, listen: false).setUser(response['user']);
-
-    // Set the token immediately in the provider
-    Provider.of<TokenProvider>(context, listen: false).setToken(response['token']);
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return const Scaffold(
-          body: BaseLayout(),
-        );
-      }),
+    final response = await apiService.post(
+      endpoint: '/users/login',
+      data: {
+        'email': emailController.text,
+        'password': passwordController.text,
+        'deviceType': deviceType
+      },
     );
+
+    print(response);
+
+    if (response != null &&
+        response['token'] != null &&
+        response['user'] != null) {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Save the token and user info to SharedPreferences
+      await prefs.setString('auth_token', response['token']);
+      await prefs.setString('user_info', jsonEncode(response['user']));
+
+      // Update providers with user and token
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+
+      userProvider.setUser(response['user']);
+      tokenProvider.setToken(response['token']);
+
+      // Navigate to BaseLayout, replacing the current route
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: BaseLayout(),
+          ),
+        ),
+      );
+    }
   }
-}
-
-
-
 
   @override
   void dispose() {

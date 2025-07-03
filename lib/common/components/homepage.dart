@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:silentsignal/features/crime_report_form.dart';
 import 'package:silentsignal/providers/user_provider.dart';
+import 'package:silentsignal/common/components/search_report_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -74,7 +75,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Card(
-                      child: InkWell( // Added InkWell for tap functionality
+                      child: InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -86,19 +87,19 @@ class HomePage extends StatelessWidget {
                           child: const Row(
                             children: [
                               Icon(Icons.menu_book),
-                              SizedBox(width: 8), // Added spacing between icon and text
+                              SizedBox(width: 8),
                               Text(
                                 'New tip?',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 14),
                               ),
                             ],
-                          )
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Card(
                       child: Container(
@@ -106,16 +107,54 @@ class HomePage extends StatelessWidget {
                         child: const Row(
                           children: [
                             Icon(Icons.contact_emergency),
-                            SizedBox(width: 8), // Added spacing between icon and text
+                            SizedBox(width: 8),
                             Text(
                               'Emergency?',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 14),
                             ),
                           ],
-                        )
+                        ),
                       ),
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SearchReportPage()),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            child: const Row(
+                              children: [
+                                Icon(Icons.visibility),
+                                SizedBox(width: 8),
+                                Text(
+                                  'View Reports',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Container(), // Empty for symmetry
                   ),
                 ],
               ),
@@ -253,7 +292,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),  
-           
+            const SizedBox(height: 16),
             ],
           ),
         ),
