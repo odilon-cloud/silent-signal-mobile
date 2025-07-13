@@ -235,10 +235,20 @@ class _LoginformState extends State<Loginform> {
   }
 
   void _submitForm() async {
+
+    //clear any previous error messages
+    setState((){
+      loginError = null;
+    });
+
     final apiService = ApiService(
         baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
     String deviceType = 'Mobile';
 
+    print("Sending to Backend: ");
+    print("Email: ${emailController.text}");
+    print("Password: ${passwordController.text}");
+    print("DeviceType: $deviceType");
     final response = await apiService.post(
       endpoint: '/users/login',
       data: {
@@ -248,34 +258,81 @@ class _LoginformState extends State<Loginform> {
       },
     );
 
-    print(response);
+    //Below , debugging message from the server was added
+    print('Response from server:');
+    print('Full response: $response');
+    print('Response type: ${response.runtimeType}');
 
+
+    //when the server returned nothing
+    if(response==null){
+      print('Nothing was returned by the server');
+      setState((){
+        loginError = 'Server is bugging. Try again later.';
+      });
+      return;
+    }
+      
+      //Print fields found in the response
+      print('Response fields: ${response.keys}');
+
+      //Check if some specific fields exist
+      print('Has token field: ${response.containsKey('token')}');
+      print('Has user field: ${response.containsKey('userData')}');
+
+      //Check what the backend actually returned
+      if(response.containsKey('token')){
+        print('Token value: ${response['token']}');
+      }
+      if(response.containsKey('userData')){
+        print('User value:${response['userData']}');
+      }
+      //Check whether login was successful
     if (response != null &&
         response['token'] != null &&
-        response['user'] != null) {
-      final prefs = await SharedPreferences.getInstance();
+        response['userData'] != null) {
+          print('SUCCESS: Both token and user found in response');
 
-      // Save the token and user info to SharedPreferences
-      await prefs.setString('auth_token', response['token']);
-      await prefs.setString('user_info', jsonEncode(response['user']));
+          try{
+            //save the data to phone storage
 
-      // Update providers with user and token
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('auth_token', response['token']);
+            await prefs.setString('user_info', jsonEncode(response['user']));
+            print('Success: Data saved to phone storafge');
+          
+          //Update app state with user info
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          final tokenProvider = Provider.of<TokenProvider>(context, listen:false);
 
-      userProvider.setUser(response['user']);
-      tokenProvider.setToken(response['token']);
+          userProvider.setUser(response['userData']);
+          tokenProvider.setToken(response['token']);
 
-      // Navigate to BaseLayout, replacing the current route
+          print('App state updated with user info');
+
+      //Navigate to BaseLayout, replacing the current route
+      print('success: About to navigate to BaseLayout');
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const Scaffold(
-            body: BaseLayout(),
-          ),
+          builder: (context) => const BaseLayout(),
         ),
       );
+      print('SUCCESS: Navigation completed');
+    }catch(e){
+      print('ERROR: failed to save data or navigate: $e');
+      setState((){
+        loginError = 'Login successful but failed to save data. Please try again.';
+      });
     }
+  }else{
+    //Handle token or user not found
+    print('Token or user missing from response');
+    setState((){
+      loginError = 'Login failed. Ensure you have valid credentials.';
+    });
   }
+  }
+  
 
   @override
   void dispose() {
