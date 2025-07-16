@@ -265,6 +265,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:silentsignal/common/components/search_report_page.dart';
 import 'package:silentsignal/features/crime_report_form.dart';
 import 'package:silentsignal/providers/user_provider.dart';
 
@@ -319,16 +320,34 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 25), // Reduced from 35
           
-          // Quote card
           Card(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              child: const Text(
-                'Courage above all things is the first quality of a warrior',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14),
-              ), 
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchReportPage()),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search, size: 26, color: Colors.black),
+                    SizedBox(width: 15),
+                    Text(
+                      'Track Case',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 25),
@@ -375,7 +394,7 @@ class HomePage extends StatelessWidget {
                       child: const Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.contact_emergency, size: 32, color: Colors.red),
+                          Icon(Icons.contact_emergency, size: 32, color: Colors.black),
                           SizedBox(height: 8),
                           Text(
                             'Emergency?',

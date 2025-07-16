@@ -111,7 +111,7 @@ class _CommunityPageState extends State<CommunityPage> {
     } catch (e) {
       if (!silent) {
         setState(() {
-          errorMessage = 'Error connecting to server: $e';
+          errorMessage = 'Something went wrong. Please try again in a moment.';
           isLoading = false;
         });
       }
