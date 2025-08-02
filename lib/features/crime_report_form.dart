@@ -15,6 +15,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CrimeReportForm extends StatefulWidget {
   const CrimeReportForm({super.key});
@@ -246,38 +247,47 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       String? voiceUrl;
       String? mediaType;
       if (_voiceNotePath != null) {
+        print('Quick submission - Starting voice recording upload...');
         voiceUrl = await _fileUploadService.uploadVoiceRecording(_voiceNotePath!);
+        print('Quick submission - Voice recording upload result: $voiceUrl');
         if (voiceUrl == null) {
           throw Exception('Failed to upload voice recording');
         }
         // Get mediaType from uploadMultipleFiles to avoid accessing private _getContentType
+        print('Quick submission - Getting media type...');
         final uploadResult = (await _fileUploadService.uploadMultipleFiles([File(_voiceNotePath!)]))[0];
+        print('Quick submission - Media type result: ${uploadResult.isSuccess}');
         if (!uploadResult.isSuccess) {
           throw Exception('Failed to get media type for voice recording');
         }
         mediaType = uploadResult.mediaType;
+      } else {
+        print('Quick submission - No voice recording to upload');
       }
 
       final quickReport = {
         'voice_recording_url': voiceUrl,
-        'urgency_level': UrgencyLevel.getByValue('high'),
+        'urgency_level': UrgencyLevel.mapToBackend('high'),
         'is_emergency': true,
         'longitude': _formData.longitude ?? 0,
         'latitude': _formData.latitude ?? 0,
         'status': 'PENDING',
-        'anonymous_report': userId == null,
+       // 'anonymous_report': userId == null,
       };
 
       if (userId != null) {
         quickReport['user_id'] = userId;
       }
 
+      print('Quick submission - About to make API call...');
       final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+      print('Quick submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
+      print('Quick submission - Request data: $quickReport');
       final response = await apiService.post(
-        endpoint: 'crimeReports/voice',
+        endpoint: '/crimeReports/voice',
         data: quickReport,
       );
-      print(response);
+      print('Quick submission - Response: $response');
 
       if (response != null && response['reference_token'] != null) {
         // Upload voice recording metadata to backend
@@ -441,6 +451,44 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     }
   }
 
+  void pickCamera() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? photo = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 85,
+      );
+
+      if (photo != null) {
+        setState(() {
+          selectedFiles.add(File(photo.path));
+        });
+      }
+    } catch (e) {
+      print("Error picking camera: $e");
+      _showSnackBar('Error taking photo: $e', Colors.red);
+    }
+  }
+
+  void pickGallery() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          selectedFiles.add(File(image.path));
+        });
+      }
+    } catch (e) {
+      print("Error picking gallery: $e");
+      _showSnackBar('Error picking from gallery: $e', Colors.red);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -499,6 +547,8 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
     return FileUploadPage(
       selectedFiles: selectedFiles,
       onPickFile: pickFile,
+      onCamera: pickCamera,
+      onGallery: pickGallery,
       onPrevious: () {
         _pageController.previousPage(
           duration: const Duration(milliseconds: 300),
@@ -587,10 +637,13 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       // }
 
       final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+      print('Normal submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
+      print('Normal submission - Request data: $requestData');
       final response = await apiService.post(
         endpoint: '/crimeReports',  
         data: requestData,
       );
+      print('Normal submission - Response: $response');
       
       if (response != null && response['reference_token'] != null) {
         // Upload media metadata to backend

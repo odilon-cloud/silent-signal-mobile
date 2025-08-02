@@ -316,6 +316,8 @@ import 'dart:io';
 class FileUploadPage extends StatefulWidget {
   final List<dynamic> selectedFiles;
   final VoidCallback onPickFile;
+  final VoidCallback onCamera;
+  final VoidCallback onGallery;
   final VoidCallback onPrevious;
   final VoidCallback onSubmit;
   final PageController pageController;
@@ -326,6 +328,8 @@ class FileUploadPage extends StatefulWidget {
     Key? key,
     required this.selectedFiles,
     required this.onPickFile,
+    required this.onCamera,
+    required this.onGallery,
     required this.onPrevious,
     required this.onSubmit,
     required this.pageController,
@@ -599,9 +603,9 @@ class _FileUploadPageState extends State<FileUploadPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildUploadButton(Icons.camera_alt, 'Camera', () => widget.onPickFile()),
+              _buildUploadButton(Icons.camera_alt, 'Camera', () => widget.onCamera()),
               const SizedBox(width: 20),
-              _buildUploadButton(Icons.photo_library, 'Gallery', () => widget.onPickFile()),
+              _buildUploadButton(Icons.photo_library, 'Gallery', () => widget.onGallery()),
               const SizedBox(width: 20),
               _buildUploadButton(Icons.attach_file, 'Files', () => widget.onPickFile()),
             ],
