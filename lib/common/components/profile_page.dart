@@ -175,7 +175,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
-import 'package:silentsignal/providers/token_provider.dart';
 import 'package:silentsignal/providers/user_provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -197,17 +196,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _checkLoginStatus() async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('auth_token');
-      
-      // Also check if token provider has a token
-      final tokenProvider = Provider.of<TokenProvider>(context, listen: false);
+      // Check if user provider has user data
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       
       setState(() {
-        isLoggedIn = (token != null && token.isNotEmpty) || 
-                    (tokenProvider.token != null && tokenProvider.token!.isNotEmpty) ||
-                    (userProvider.user != null);
+        isLoggedIn = (userProvider.user != null && userProvider.user!['id'] != null);
         isLoading = false;
       });
     } catch (e) {
@@ -230,13 +223,11 @@ class _ProfilePageState extends State<ProfilePage> {
         // Get SharedPreferences instance
         SharedPreferences prefs = await SharedPreferences.getInstance();
         
-        // Clear token and user info
-        await prefs.remove('auth_token');
+        // Clear user info
         await prefs.remove('user_info');
         
         // Clear providers
         Provider.of<UserProvider>(context, listen: false).clearUser();
-        Provider.of<TokenProvider>(context, listen: false).clearToken();
         
         // Update login status
         setState(() {
@@ -273,6 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

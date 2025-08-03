@@ -323,6 +323,7 @@ class FileUploadPage extends StatefulWidget {
   final PageController pageController;
   final bool showPasswordField;
   final TextEditingController? passwordController;
+  final bool isSubmitting;
 
   const FileUploadPage({
     Key? key,
@@ -335,6 +336,7 @@ class FileUploadPage extends StatefulWidget {
     required this.pageController,
     this.showPasswordField = false,
     this.passwordController,
+    this.isSubmitting = false,
   }) : super(key: key);
 
   @override
@@ -348,7 +350,7 @@ class _FileUploadPageState extends State<FileUploadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -890,18 +892,21 @@ class _FileUploadPageState extends State<FileUploadPage> {
         Expanded(
           flex: 2,
           child: ElevatedButton.icon(
-            onPressed: _validateAndSubmit,
-            icon: const Icon(Icons.send, color: Colors.white),
-            label: const Text(
-              'Submit Report',
-              style: TextStyle(
+            onPressed: widget.isSubmitting ? null : _validateAndSubmit,
+            icon: Icon(
+              widget.isSubmitting ? Icons.hourglass_empty : Icons.send,
+              color: Colors.white,
+            ),
+            label: Text(
+              widget.isSubmitting ? 'Submitting...' : 'Submit Report',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: widget.isSubmitting ? Colors.grey : Colors.blue,
               padding: const EdgeInsets.symmetric(vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),

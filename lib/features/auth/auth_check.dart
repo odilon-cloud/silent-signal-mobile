@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:silentsignal/providers/user_provider.dart';
-import 'package:silentsignal/providers/token_provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
 import 'dart:convert';
@@ -23,31 +22,38 @@ class _AuthCheckState extends State<AuthCheck> {
   }
 
   Future<void> checkAuthentication() async {
-    // Get the saved token from SharedPreferences
+    // Get the saved user info from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
+    final userInfo = prefs.getString('user_info');
     
-    if (token != null && token.isNotEmpty) {
-      // Token exists, set it in the provider
-      Provider.of<TokenProvider>(context, listen: false).setToken(token);
-      
-      // Get and set user info if available
-      final userInfo = prefs.getString('user_info');
-      if (userInfo != null && userInfo.isNotEmpty) {
-        try {
-          final userMap = jsonDecode(userInfo);
+    if (userInfo != null && userInfo.isNotEmpty) {
+      try {
+        final userMap = jsonDecode(userInfo);
+        
+        // Check if user data is valid (has required fields)
+        if (userMap['id'] != null && userMap['email'] != null && userMap['first_name'] != null) {
+          // Set user info in the provider
           Provider.of<UserProvider>(context, listen: false).setUser(userMap);
-        } catch (e) {
-          print('Error parsing saved user info: $e');
+          
+          // Navigate to the BaseLayout screen
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const BaseLayout()),
+          );
+        } else {
+          // Invalid user data, navigate to login screen
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Loginform()),
+          );
         }
+      } catch (e) {
+        print('Error parsing saved user info: $e');
+        // Error parsing user data, navigate to login screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Loginform()),
+        );
       }
-      
-      // Navigate to the BaseLayout screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const BaseLayout()),
-      );
     } else {
-      // No token found, navigate to login screen
+      // No user info found, navigate to login screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const Loginform()),
       );
@@ -59,6 +65,7 @@ class _AuthCheckState extends State<AuthCheck> {
     // This is just a loading indicator that will be briefly shown
     // while checking authentication state
     return const Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: CircularProgressIndicator(),
       ),

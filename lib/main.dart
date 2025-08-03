@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:silentsignal/features/auth/auth_check.dart';
 import 'package:silentsignal/providers/user_provider.dart';
-import 'package:silentsignal/providers/token_provider.dart';
 
 
 void main() async {
@@ -26,7 +25,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => TokenProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

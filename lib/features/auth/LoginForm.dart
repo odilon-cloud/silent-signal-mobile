@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:silentsignal/providers/user_provider.dart';
-import 'package:silentsignal/providers/token_provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/SignupForm.dart';
@@ -320,19 +319,16 @@ class _LoginformState extends State<Loginform> {
       print('Login response: $response');
       
       if (response != null && 
-          (response['status'] == 'success' || response['token'] != null)) {
-
-        // Save the token to SharedPreferences
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('auth_token', response['token']);
+          (response['status'] == 'success' || 
+           (response['id'] != null && response['email'] != null && response['first_name'] != null))) {
 
         // Save user information to SharedPreferences
-        await prefs.setString('user_info', jsonEncode(response['user']));
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_info', jsonEncode(response));
 
         // Set user information in the UserProvider
         if (mounted) {
-          Provider.of<UserProvider>(context, listen: false).setUser(response['user']);
-          Provider.of<TokenProvider>(context, listen: false).setToken(response['token']);
+          Provider.of<UserProvider>(context, listen: false).setUser(response);
 
           Navigator.pushReplacement(
             context,

@@ -6,6 +6,7 @@ import 'package:silentsignal/common/components/homepage.dart';
 import 'package:silentsignal/common/components/profile_page.dart';
 import 'package:silentsignal/common/components/search_report_page.dart';
 
+
 class BaseLayout extends StatefulWidget {
   const BaseLayout({super.key});
 
@@ -107,6 +108,7 @@ class _BaseLayoutState extends State<BaseLayout> {
     // Special handling for HomePage (index 0) - scrolling header
     if (_selectedIndex == 0) {
       return Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: CustomScrollView(
             slivers: [
@@ -128,6 +130,7 @@ class _BaseLayoutState extends State<BaseLayout> {
     
     // For all other pages - fixed header
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Fixed header for other pages
@@ -176,6 +179,7 @@ class _BaseLayoutState extends State<BaseLayout> {
           icon: Icon(Icons.emoji_events),
           label: 'Events',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',

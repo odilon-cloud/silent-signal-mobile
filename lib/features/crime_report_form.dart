@@ -16,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 
 class CrimeReportForm extends StatefulWidget {
   const CrimeReportForm({super.key});
@@ -386,19 +387,45 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    SelectableText(
-                      referenceToken,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        letterSpacing: 1.2,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: SelectableText(
+                            referenceToken,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: referenceToken));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Reference token copied to clipboard!'),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.copy,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          tooltip: 'Copy reference token',
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Save this reference to track your report',
+                      'Tap the copy icon to save this reference',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -492,7 +519,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: PageView(
           controller: _pageController,
@@ -558,6 +585,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       onSubmit: _submitForm,
       pageController: _pageController,
       showPasswordField: false, // Password field removed for all users
+      isSubmitting: _isSubmitting,
     );
   }
 
