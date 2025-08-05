@@ -6,6 +6,7 @@ import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
 import 'package:silentsignal/services/api_service.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class Signupform extends StatefulWidget {
   const Signupform({super.key});
@@ -29,6 +30,7 @@ class _SignupformState extends State<Signupform> {
   String? passwordError;
   String? confirmPasswordError;
   bool showValidationErrors = false;
+  bool isLoading = false; // Add loading state
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +200,9 @@ class _SignupformState extends State<Signupform> {
 
                 SampleButton(
                   onTap: _validateAndSubmit,
-                  buttonText: 'Submit',
+                  buttonText: 'Sign Up',
+                  loadingText: 'Creating Account...',
+                  isLoading: isLoading,
                   height: 40,
                   width: MediaQuery.of(context).size.width * 0.7
                 ),
@@ -291,9 +295,12 @@ class _SignupformState extends State<Signupform> {
   }
 
   void _submitForm() async {
-    // Add your signup logic here
+    setState(() {
+      isLoading = true;
+    });
 
-     final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+    try {
+      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
 
     final response = await apiService.post(
       endpoint: '/users',  
@@ -307,7 +314,7 @@ class _SignupformState extends State<Signupform> {
       },
     );
 
-    print(response);
+    logger.response('Signup', response);
     
     if (response != null && response['status'] == 'success'  || response['id'] != null) {
       showDialog(
@@ -322,18 +329,18 @@ class _SignupformState extends State<Signupform> {
               Container(
                 width: 100,
                 height: 100,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.green,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check,
                   color: Colors.white,
                   size: 60,
                 ),
               ),
-              SizedBox(height: 15),
-               Text('Account Created successfully!'),
+              const SizedBox(height: 15),
+              const Text('Account Created successfully!'),
             ],
           ),
           actions: [
@@ -354,7 +361,7 @@ class _SignupformState extends State<Signupform> {
   
     } else {
       // Handle Signup failure with custom message
-     print('Sign up Failed: ${response?['message'] ?? 'Unknown error'}');
+     logger.error('Sign up Failed: ${response?['message'] ?? 'Unknown error'}');
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -366,7 +373,24 @@ class _SignupformState extends State<Signupform> {
         ),
       );
     }
-    
+    } catch (error) {
+      logger.error('Signup error', error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Network error. Please check your connection and try again.',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   @override

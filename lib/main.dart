@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:silentsignal/features/auth/auth_check.dart';
 import 'package:silentsignal/providers/user_provider.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 
 void main() async {
@@ -11,7 +12,8 @@ void main() async {
   try {
     await dotenv.load(fileName: ".env");
   } catch (e) {
-    print("Error loading .env: $e");
+    
+    logger.error("Error loading .env", e);
   }
 
   runApp(const MyApp());

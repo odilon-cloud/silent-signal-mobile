@@ -17,6 +17,7 @@ import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class CrimeReportForm extends StatefulWidget {
   const CrimeReportForm({super.key});
@@ -85,7 +86,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         });
       }
     } catch (e) {
-      print('Error initializing audio: $e');
+      logger.error('Error initializing audio', e);
     }
   }
 
@@ -130,7 +131,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         }
       });
     } catch (e) {
-      print('Error starting recording: $e');
+      logger.error('Error starting recording', e);
       if (mounted) {
         _showSnackBar('Failed to start recording: $e', Colors.red);
       }
@@ -157,7 +158,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         }
       }
     } catch (e) {
-      print('Error stopping recording: $e');
+      logger.error('Error stopping recording', e);
       if (mounted) {
         _showSnackBar('Failed to stop recording: $e', Colors.red);
       }
@@ -184,7 +185,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         );
       }
     } catch (e) {
-      print('Error playing voice note: $e');
+      logger.error('Error playing voice note', e);
       if (mounted) {
         setState(() {
           _isPlaying = false;
@@ -214,7 +215,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         _formData.voiceRecordingPath = null;
       });
     } catch (e) {
-      print('Error deleting voice note: $e');
+      logger.error('Error deleting voice note', e);
       if (mounted) {
         _showSnackBar('Failed to delete voice note: $e', Colors.red);
       }
@@ -248,22 +249,22 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       String? voiceUrl;
       String? mediaType;
       if (_voiceNotePath != null) {
-        print('Quick submission - Starting voice recording upload...');
+        logger.info('Quick submission - Starting voice recording upload...');
         voiceUrl = await _fileUploadService.uploadVoiceRecording(_voiceNotePath!);
-        print('Quick submission - Voice recording upload result: $voiceUrl');
+                  logger.info('Quick submission - Voice recording upload result: $voiceUrl');
         if (voiceUrl == null) {
           throw Exception('Failed to upload voice recording');
         }
         // Get mediaType from uploadMultipleFiles to avoid accessing private _getContentType
-        print('Quick submission - Getting media type...');
+        logger.info('Quick submission - Getting media type...');
         final uploadResult = (await _fileUploadService.uploadMultipleFiles([File(_voiceNotePath!)]))[0];
-        print('Quick submission - Media type result: ${uploadResult.isSuccess}');
+        logger.info('Quick submission - Media type result: ${uploadResult.isSuccess}');
         if (!uploadResult.isSuccess) {
           throw Exception('Failed to get media type for voice recording');
         }
         mediaType = uploadResult.mediaType;
       } else {
-        print('Quick submission - No voice recording to upload');
+        logger.info('Quick submission - No voice recording to upload');
       }
 
       final quickReport = {
@@ -280,15 +281,15 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         quickReport['user_id'] = userId;
       }
 
-      print('Quick submission - About to make API call...');
+      logger.info('Quick submission - About to make API call...');
       final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
-      print('Quick submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
-      print('Quick submission - Request data: $quickReport');
+              logger.info('Quick submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
+              logger.api('Quick submission', quickReport);
       final response = await apiService.post(
         endpoint: '/crimeReports/voice',
         data: quickReport,
       );
-      print('Quick submission - Response: $response');
+              logger.response('Quick submission', response);
 
       if (response != null && response['reference_token'] != null) {
         // Upload voice recording metadata to backend
@@ -473,7 +474,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         });
       }
     } catch (e) {
-      print("Error picking file: $e");
+      logger.error("Error picking file", e);
       _showSnackBar('Error picking file: $e', Colors.red);
     }
   }
@@ -492,7 +493,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         });
       }
     } catch (e) {
-      print("Error picking camera: $e");
+      logger.error("Error picking camera", e);
       _showSnackBar('Error taking photo: $e', Colors.red);
     }
   }
@@ -511,7 +512,7 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
         });
       }
     } catch (e) {
-      print("Error picking gallery: $e");
+      logger.error("Error picking gallery", e);
       _showSnackBar('Error picking from gallery: $e', Colors.red);
     }
   }
@@ -665,13 +666,13 @@ class _CrimeReportFormState extends State<CrimeReportForm> {
       // }
 
       final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
-      print('Normal submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
-      print('Normal submission - Request data: $requestData');
+              logger.info('Normal submission - API Base URL: ${dotenv.env['API_BASE_URL']}');
+              logger.api('Normal submission', requestData);
       final response = await apiService.post(
         endpoint: '/crimeReports',  
         data: requestData,
       );
-      print('Normal submission - Response: $response');
+              logger.response('Normal submission', response);
       
       if (response != null && response['reference_token'] != null) {
         // Upload media metadata to backend

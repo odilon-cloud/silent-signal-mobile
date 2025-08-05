@@ -107,7 +107,7 @@ class _MyCasesPageState extends State<MyCasesPage> {
   }
 
   Color _getUrgencyColor(String urgency) {
-    switch (urgency?.toUpperCase()) {
+    switch (urgency.toUpperCase()) {
       case 'LOW':
         return Colors.green;
       case 'MEDIUM':
@@ -122,7 +122,7 @@ class _MyCasesPageState extends State<MyCasesPage> {
   }
 
   Color _getStatusColor(String status) {
-    switch (status?.toUpperCase()) {
+    switch (status.toUpperCase()) {
       case 'PENDING':
         return Colors.orange;
       case 'UNDER_REVIEW':
@@ -139,7 +139,7 @@ class _MyCasesPageState extends State<MyCasesPage> {
   }
 
   String _getStatusDescription(String status) {
-    switch (status?.toUpperCase()) {
+    switch (status.toUpperCase()) {
       case 'PENDING':
         return 'Your report has been received and is awaiting review by legal experts.';
       case 'UNDER_REVIEW':
@@ -215,8 +215,8 @@ class _MyCasesPageState extends State<MyCasesPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
+            decoration: const BoxDecoration(
+              gradient:  LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [Color(0xFFF8FAFC), Color(0xFFE0E7FF)],

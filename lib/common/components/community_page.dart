@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:silentsignal/services/api_service.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 // Community Post Model
 class CommunityPost {
@@ -78,7 +79,7 @@ class _CommunityPageState extends State<CommunityPage> {
         // Add any query parameters if needed
         // queryParameters: {'limit': 20, 'page': 1}
       );
-      print(response);
+              logger.response('Community posts', response);
       
       if (response != null) {
         final fetchedPosts = (response as List)
@@ -158,7 +159,7 @@ class _CommunityPageState extends State<CommunityPage> {
         return '${(difference.inDays / 7).floor()}w ago';
       }
     } catch (e) {
-      print('Error calculating time ago: $e');
+              logger.error('Error calculating time ago', e);
       return 'Just now';
     }
   }

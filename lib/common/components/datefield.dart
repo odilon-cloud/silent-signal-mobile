@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class DateInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -33,7 +34,7 @@ class _DateInputFieldState extends State<DateInputField> {
       });
     }
   } catch (e) {
-    print('Error showing date picker: $e');
+          logger.error('Error showing date picker', e);
   }
 }
   @override

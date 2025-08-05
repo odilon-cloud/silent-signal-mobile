@@ -6,6 +6,7 @@ import 'package:path/path.dart' as path;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class FileUploadService {
   final String baseUrl;
@@ -29,11 +30,11 @@ class FileUploadService {
         final data = jsonDecode(response.body);
         return data['url'];
       } else {
-        print('Failed to get presigned URL: ${response.statusCode}');
+        logger.error('Failed to get presigned URL: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Error getting presigned URL from backend: $e');
+      logger.error('Error getting presigned URL from backend', e);
       return null;
     }
   }
@@ -48,7 +49,7 @@ class FileUploadService {
       }
 
       // If backend fails, generate locally
-      print('Generating presigned URL locally...');
+      logger.info('Generating presigned URL locally...');
       
       // AWS S3 configuration from environment variables
       final accessKey = dotenv.env['AWS_ACCESS_KEY_ID'];
@@ -57,7 +58,7 @@ class FileUploadService {
       final bucket = dotenv.env['S3_BUCKET'];
 
       if (accessKey == null || secretKey == null || bucket == null) {
-        print('Missing AWS credentials in .env file');
+        logger.warning('Missing AWS credentials in .env file');
         return null;
       }
 
@@ -76,7 +77,7 @@ class FileUploadService {
 
       return url;
     } catch (e) {
-      print('Error generating presigned URL: $e');
+      logger.error('Error generating presigned URL', e);
       return null;
     }
   }
@@ -100,7 +101,7 @@ class FileUploadService {
     required int expiresInSeconds,
   }) {
     final now = DateTime.now().toUtc();
-    final expiresAt = now.add(Duration(seconds: expiresInSeconds));
+    
     
     // AWS signature version 4
     final dateStamp = now.toIso8601String().split('T')[0].replaceAll('-', '');
@@ -188,7 +189,7 @@ class FileUploadService {
 
       return compressedFile != null ? File(compressedFile.path) : file;
     } catch (e) {
-      print('Error compressing image: $e');
+      logger.error('Error compressing image', e);
       return file; // Return original if compression fails
     }
   }
@@ -233,7 +234,7 @@ class FileUploadService {
         throw Exception('Upload failed with status: ${uploadResponse.statusCode}');
       }
     } catch (e) {
-      print('Error uploading file: $e');
+      logger.error('Error uploading file', e);
       return null;
     }
   }
@@ -248,7 +249,7 @@ class FileUploadService {
 
       return await uploadFileToS3(voiceFile);
     } catch (e) {
-      print('Error uploading voice recording: $e');
+      logger.error('Error uploading voice recording', e);
       return null;
     }
   }
@@ -307,12 +308,12 @@ class FileUploadService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       } else {
-        print('Media upload failed: ${response.statusCode}');
-        print('Response: ${response.body}');
+        logger.error('Media upload failed: ${response.statusCode}');
+        logger.error('Response: ${response.body}');
         return false;
       }
     } catch (e) {
-      print('Error uploading media info: $e');
+      logger.error('Error uploading media info', e);
       return false;
     }
   }
@@ -328,7 +329,7 @@ class FileUploadService {
         }
       }
     } catch (error) {
-      print('Error in handlePostReportMedia: $error');
+      logger.error('Error in handlePostReportMedia', error);
       throw Exception('Failed to upload some media files');
     }
   }

@@ -6,6 +6,7 @@ import 'package:silentsignal/providers/user_provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
 import 'package:silentsignal/features/auth/LoginForm.dart';
 import 'dart:convert';
+import 'package:silentsignal/utils/logger.dart';
 
 class AuthCheck extends StatefulWidget {
   const AuthCheck({Key? key}) : super(key: key);
@@ -33,12 +34,22 @@ class _AuthCheckState extends State<AuthCheck> {
         // Check if user data is valid (has required fields)
         if (userMap['id'] != null && userMap['email'] != null && userMap['first_name'] != null) {
           // Set user info in the provider
-          Provider.of<UserProvider>(context, listen: false).setUser(userMap);
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(userMap);
           
-          // Navigate to the BaseLayout screen
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const BaseLayout()),
-          );
+          // Check if session is still valid
+          if (userProvider.isSessionValid()) {
+            // Navigate to the BaseLayout screen
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const BaseLayout()),
+            );
+          } else {
+            // Session expired, clear user data and navigate to login
+            userProvider.clearUser();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const Loginform()),
+            );
+          }
         } else {
           // Invalid user data, navigate to login screen
           Navigator.of(context).pushReplacement(
@@ -46,7 +57,7 @@ class _AuthCheckState extends State<AuthCheck> {
           );
         }
       } catch (e) {
-        print('Error parsing saved user info: $e');
+        logger.error('Error parsing saved user info', e);
         // Error parsing user data, navigate to login screen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const Loginform()),

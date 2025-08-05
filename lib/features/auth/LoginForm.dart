@@ -9,6 +9,7 @@ import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/SignupForm.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
 import 'package:silentsignal/services/api_service.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class Loginform extends StatefulWidget {
   const Loginform({super.key});
@@ -202,7 +203,7 @@ class _LoginformState extends State<Loginform> {
                   child: ElevatedButton(
                     onPressed: isLoading ? null : _validateAndSubmit,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: isLoading ? Colors.grey : Colors.blue,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -228,7 +229,7 @@ class _LoginformState extends State<Loginform> {
                             ],
                           )
                         : const Text(
-                            'Submit',
+                            'Login',
                             style: TextStyle(fontSize: 16),
                           ),
                   ),
@@ -316,7 +317,7 @@ class _LoginformState extends State<Loginform> {
         },
       );
 
-      print('Login response: $response');
+      logger.response('Login', response);
       
       if (response != null && 
           (response['status'] == 'success' || 
@@ -346,7 +347,7 @@ class _LoginformState extends State<Loginform> {
         });
       }
     } catch (error) {
-      print('Login error: $error');
+      logger.error('Login failed', error);
       setState(() {
         loginError = 'Network error. Please check your connection and try again.';
       });

@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:silentsignal/utils/logger.dart';
 
 class MapSelector extends StatefulWidget {
   final Function(double lat, double lng, String address) onLocationSelect;
@@ -83,7 +84,7 @@ class _MapSelectorState extends State<MapSelector> {
         return data['display_name'] ?? '${lat.toStringAsFixed(6)}, ${lng.toStringAsFixed(6)}';
       }
     } catch (e) {
-      debugPrint('Reverse geocoding failed: $e');
+              logger.error('Reverse geocoding failed', e);
     }
     return '${lat.toStringAsFixed(6)}, ${lng.toStringAsFixed(6)}';
   }
@@ -123,7 +124,7 @@ class _MapSelectorState extends State<MapSelector> {
         }
       }
     } catch (e) {
-      debugPrint('Geocoding failed: $e');
+              logger.error('Geocoding failed', e);
       _showSnackBar('Failed to search address. Please try again.');
     } finally {
       setState(() => _isGeocoding = false);
@@ -170,7 +171,7 @@ class _MapSelectorState extends State<MapSelector> {
       widget.onLocationSelect(position.latitude, position.longitude, address);
       
     } catch (e) {
-      debugPrint('Geolocation error: $e');
+              logger.error('Geolocation error', e);
       _showSnackBar('Unable to get your current location. Please select manually on the map.');
     } finally {
       setState(() => _isGettingLocation = false);

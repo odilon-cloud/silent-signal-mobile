@@ -195,7 +195,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'Community',
               style: TextStyle(
                 fontSize: 14,
@@ -203,15 +203,15 @@ class HomePage extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 25,
                   backgroundImage: NetworkImage('https://via.placeholder.com/50'),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +219,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'Pigeon Car',
                             style: TextStyle(
                               fontSize: 14,
@@ -227,7 +227,7 @@ class HomePage extends StatelessWidget {
                               color: Colors.black87,
                             ),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Text(
                             '3 hours ago',
                             style: TextStyle(
@@ -237,8 +237,8 @@ class HomePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 4), 
-                      Text(
+                      const SizedBox(height: 4), 
+                      const Text(
                         'Try something i want to see how it works?',
                         style: TextStyle(
                           fontSize: 13,

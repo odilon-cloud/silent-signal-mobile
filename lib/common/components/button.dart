@@ -6,6 +6,8 @@ class SampleButton extends StatelessWidget {
   final Color? buttonColor;
   final double? width;
   final double? height;
+  final bool isLoading;
+  final String? loadingText;
 
   const SampleButton({
     super.key, 
@@ -14,6 +16,8 @@ class SampleButton extends StatelessWidget {
     this.buttonColor,
     this.width,
     this.height,
+    this.isLoading = false,
+    this.loadingText,
   });
 
   @override
@@ -23,7 +27,7 @@ class SampleButton extends StatelessWidget {
     double horizontalPadding = height != null ? height! * 0.3 : 25.0; // 30% of height or default 25
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLoading ? null : onTap,
       child: Container(
         width: width,
         height: height,
@@ -33,19 +37,43 @@ class SampleButton extends StatelessWidget {
         ),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: buttonColor ?? Colors.black,
+          color: isLoading ? Colors.grey : (buttonColor ?? Colors.black),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
-          child: Text(
-            buttonText,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: height != null ? height! * 0.4 : 16, // Dynamic font size
-            ),
-          ),
+          child: isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: height != null ? height! * 0.5 : 20,
+                      height: height != null ? height! * 0.5 : 20,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                    SizedBox(width: height != null ? height! * 0.2 : 8),
+                    Text(
+                      loadingText ?? 'Loading...',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: height != null ? height! * 0.4 : 16,
+                      ),
+                    ),
+                  ],
+                )
+              : Text(
+                  buttonText,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: height != null ? height! * 0.4 : 16, // Dynamic font size
+                  ),
+                ),
         ),
       ),
     );

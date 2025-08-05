@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:silentsignal/utils/logger.dart';
 
 class ApiService {
   final String baseUrl;
@@ -28,7 +29,7 @@ class ApiService {
   Future<dynamic> post({required String endpoint, required Map<String, dynamic> data}) async {
    
     final Uri url = Uri.parse('$baseUrl$endpoint');
-     print(url);
+     logger.api(endpoint, data);
     try {
       final response = await http.post(
         url,

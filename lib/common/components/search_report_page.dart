@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:silentsignal/services/api_service.dart';
 import 'package:silentsignal/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 
 class SearchReportPage extends StatefulWidget {
@@ -121,7 +122,7 @@ class _SearchReportPageState extends State<SearchReportPage> {
       final response = await apiService.get(
         endpoint: '/crimeReports/${_foundReport!['id']}/messages/anonymous',
       );
-      print('Messages response: $response');
+              logger.response('Messages', response);
 
       if (response != null) {
         if (response is Map<String, dynamic>) {
@@ -170,7 +171,7 @@ class _SearchReportPageState extends State<SearchReportPage> {
         }
       });
     } catch (e) {
-      print('Error fetching messages: $e');
+              logger.error('Error fetching messages', e);
       setState(() {
         _messages = [];
       });
@@ -189,7 +190,7 @@ class _SearchReportPageState extends State<SearchReportPage> {
       final response = await apiService.get(
         endpoint: '/media/report/${_foundReport!['id']}',
       );
-      print('Media response: $response');
+              logger.response('Media', response);
 
       if (response != null) {
         if (response is Map<String, dynamic>) {
@@ -227,7 +228,7 @@ class _SearchReportPageState extends State<SearchReportPage> {
         });
       }
     } catch (e) {
-      print('Error fetching media: $e');
+              logger.error('Error fetching media', e);
       setState(() {
         _media = [];
       });
