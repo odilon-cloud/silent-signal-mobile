@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:silentsignal/features/auth/LoginForm.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'package:silentsignal/features/auth/auth_check.dart';
+import 'package:silentsignal/providers/user_provider.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    
+    logger.error("Error loading .env", e);
+  }
+
   runApp(const MyApp());
 }
 
@@ -11,13 +24,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Silent Signal',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          useMaterial3: true,
+        ),
+        home: const AuthCheck(), // Use AuthCheck instead of LoginForm
       ),
-      home: const Loginform(),
     );
   }
 }

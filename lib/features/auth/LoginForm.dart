@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:silentsignal/providers/user_provider.dart';
 import 'package:silentsignal/common/components/base_layout.dart';
-import 'package:silentsignal/common/components/button.dart';
 import 'package:silentsignal/common/components/textfield.dart';
 import 'package:silentsignal/features/auth/SignupForm.dart';
 import 'package:silentsignal/common/validators/form_validator.dart';
+import 'package:silentsignal/services/api_service.dart';
+import 'package:silentsignal/utils/logger.dart';
 
 class Loginform extends StatefulWidget {
   const Loginform({super.key});
@@ -19,7 +25,9 @@ class _LoginformState extends State<Loginform> {
   // Error message states
   String? emailError;
   String? passwordError;
+  String? loginError;
   bool showValidationErrors = false;
+  bool isLoading = false; // Add loading state
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +113,38 @@ class _LoginformState extends State<Loginform> {
                 ),
 
                 const SizedBox(height: 25),
+                
+                // Enhanced error message display
+                if (loginError != null)
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.red[50],
+                      border: Border.all(color: Colors.red[200]!),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red[600],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            loginError!,
+                            style: TextStyle(
+                              color: Colors.red[700],
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,11 +196,43 @@ class _LoginformState extends State<Loginform> {
 
                 const SizedBox(height: 25),
 
-                SampleButton(
-                  onTap: _validateAndSubmit,
-                  buttonText: 'Submit',
+                // Enhanced submit button with loading state
+                SizedBox(
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.7,
+                  child: ElevatedButton(
+                    onPressed: isLoading ? null : _validateAndSubmit,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isLoading ? Colors.grey : Colors.blue,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: isLoading
+                        ? const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Signing in...',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                  ),
                 ),
 
                 const SizedBox(height: 25),
@@ -203,8 +275,10 @@ class _LoginformState extends State<Loginform> {
   }
 
   void _validateAndSubmit() {
+    FocusScope.of(context).unfocus();
     setState(() {
       showValidationErrors = true;
+      loginError = null; // Clear previous login errors
 
       // Validate email
       emailError = FormValidator.validateEmail(emailController.text);
@@ -224,15 +298,112 @@ class _LoginformState extends State<Loginform> {
     }
   }
 
-  void _submitForm() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return const Scaffold(
-          body: BaseLayout(),
-        );
-      }),
-    );
+  void _submitForm() async {
+    setState(() {
+      isLoading = true;
+      loginError = null; // Clear any previous errors
+    });
+
+    try {
+      final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? 'http://localhost:3011');
+      String deviceType = 'Mobile';
+
+      final response = await apiService.post(
+        endpoint: '/users/login',  
+        data: {
+          'email': emailController.text,
+          'password': passwordController.text,
+          'deviceType': deviceType
+        },
+      );
+
+      logger.response('Login', response);
+      
+      if (response != null && 
+          (response['status'] == 'success' || 
+           (response['id'] != null && response['email'] != null && response['first_name'] != null))) {
+
+        // Save user information to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_info', jsonEncode(response));
+
+        // Set user information in the UserProvider
+        if (mounted) {
+          Provider.of<UserProvider>(context, listen: false).setUser(response);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return const Scaffold(
+                body: BaseLayout(),
+              );
+            }),
+          );
+        }
+      } else {
+        // Handle login failure
+        setState(() {
+          loginError = _getErrorMessage(response);
+        });
+      }
+    } catch (error) {
+      logger.error('Login failed', error);
+      setState(() {
+        loginError = 'Network error. Please check your connection and try again.';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  String _getErrorMessage(dynamic response) {
+    if (response == null) {
+      return 'Login failed. Please try again.';
+    }
+
+    // Handle different error response formats
+    if (response is Map<String, dynamic>) {
+      // Check for common error message fields
+      if (response.containsKey('message')) {
+        String message = response['message'].toString();
+        
+        // Map backend error messages to user-friendly messages
+        switch (message.toLowerCase()) {
+          case 'user not found':
+            return 'No account found with this email address.';
+          case 'invalid password':
+            return 'Incorrect password. Please try again.';
+          case 'unauthorized':
+            return 'Invalid email or password.';
+          default:
+            return message;
+        }
+      }
+      
+      if (response.containsKey('error')) {
+        return response['error'].toString();
+      }
+      
+      if (response.containsKey('statusCode')) {
+        int statusCode = response['statusCode'];
+        switch (statusCode) {
+          case 401:
+            return 'Invalid email or password.';
+          case 404:
+            return 'No account found with this email address.';
+          case 500:
+            return 'Server error. Please try again later.';
+          default:
+            return 'Login failed. Please try again.';
+        }
+      }
+    }
+
+    return 'Login failed. Please try again.';
   }
 
   @override
